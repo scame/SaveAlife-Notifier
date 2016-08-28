@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "454878677148",
+    "firebase_url": "https://savealife-notifier.firebaseio.com",
+    "project_id": "savealife-notifier",
+    "storage_bucket": "savealife-notifier.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454878677148:android:c323e2ea051761ce",
+        "android_client_info": {
+          "package_name": "com.example.scame.savealifenotifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454878677148-il23bkv3uus0imuoat9rp9q87kf8cs92.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scame.savealifenotifier",
+            "certificate_hash": "4B772A1FA53DC567EA2EA7FDA3C00F318034E02E"
+          }
+        },
+        {
+          "client_id": "454878677148-vdfpds6smgao1j6h7921933t28mav686.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1U2jVzENUdE22kwmOk7vmy2Zu_FWXinU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454878677148-vdfpds6smgao1j6h7921933t28mav686.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
