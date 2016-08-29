@@ -1,24 +1,28 @@
-package com.example.scame.savealifenotifier;
+package com.example.scame.savealifenotifier.presentation.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.scame.savealifenotifier.R;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class FirebaseTestActivity extends AppCompatActivity {
 
     private static final String TAG = "logTag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.firebase_test_layout);
+
+        startActivity(new Intent(this, HelpMeActivity.class));
 
         ButterKnife.bind(this);
 
