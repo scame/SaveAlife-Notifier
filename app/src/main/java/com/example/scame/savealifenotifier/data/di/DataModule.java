@@ -1,5 +1,8 @@
 package com.example.scame.savealifenotifier.data.di;
 
+import com.example.scame.savealifenotifier.data.repository.IMessagesDataManager;
+import com.example.scame.savealifenotifier.data.repository.MessagesDataManagerImp;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -31,5 +34,11 @@ public class DataModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
+    }
+
+    @Singleton
+    @Provides
+    IMessagesDataManager provideMessagesDataManager() {
+        return new MessagesDataManagerImp();
     }
 }

@@ -14,8 +14,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        inject(getAppComponent());
     }
 
     protected void replaceFragment(int containerViewId, Fragment fragment, String TAG) {

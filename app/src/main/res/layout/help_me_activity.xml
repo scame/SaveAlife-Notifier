@@ -9,19 +9,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".presentation.activities.FirebaseTestActivity">
 
-    <Button
-        android:id="@+id/subscribe_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:text="subscribe" />
-
-    <Button
-        android:id="@+id/log_token_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="logToken" />
+    <FrameLayout
+        android:id="@+id/help_me_activity_fl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 </LinearLayout>

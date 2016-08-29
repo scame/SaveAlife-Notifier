@@ -8,6 +8,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".SaveAlifeApp"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -19,6 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".presentation.activities.HelpMeActivity" />
 
         <service
             android:name=".firebase.MyFirebaseMessagingService">

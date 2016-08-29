@@ -5,6 +5,7 @@ import android.app.Application;
 
 import com.example.scame.savealifenotifier.data.di.DataModule;
 import com.example.scame.savealifenotifier.presentation.di.modules.ApplicationModule;
+import com.example.scame.savealifenotifier.presentation.di.modules.HelpMeModule;
 
 import javax.inject.Singleton;
 
@@ -18,4 +19,6 @@ public interface ApplicationComponent {
     Application getApp();
 
     Retrofit getRetrofit();
+
+    HelpMeComponent getHelpMeComponent(HelpMeModule helpMeModule);
 }
