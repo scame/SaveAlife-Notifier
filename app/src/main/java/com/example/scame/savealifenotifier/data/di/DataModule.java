@@ -1,7 +1,15 @@
 package com.example.scame.savealifenotifier.data.di;
 
+import com.example.scame.savealifenotifier.data.repository.DirectionsDataManagerImp;
+import com.example.scame.savealifenotifier.data.repository.GeocodingDataManagerImp;
+import com.example.scame.savealifenotifier.data.repository.IDirectionsDataManager;
+import com.example.scame.savealifenotifier.data.repository.IGeocodingDataManager;
+import com.example.scame.savealifenotifier.data.repository.ILocationDataManager;
 import com.example.scame.savealifenotifier.data.repository.IMessagesDataManager;
+import com.example.scame.savealifenotifier.data.repository.LocationDataManagerImp;
 import com.example.scame.savealifenotifier.data.repository.MessagesDataManagerImp;
+import com.example.scame.savealifenotifier.domain.schedulers.ObserveOn;
+import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,5 +48,23 @@ public class DataModule {
     @Provides
     IMessagesDataManager provideMessagesDataManager() {
         return new MessagesDataManagerImp();
+    }
+
+    @Singleton
+    @Provides
+    IGeocodingDataManager provideGeocodingDataManager() {
+        return new GeocodingDataManagerImp();
+    }
+
+    @Singleton
+    @Provides
+    IDirectionsDataManager provideDirectionsDatamanager() {
+        return new DirectionsDataManagerImp();
+    }
+
+    @Singleton
+    @Provides
+    ILocationDataManager provideLocationDataManager(SubscribeOn subscribeOn, ObserveOn observeOn) {
+        return new LocationDataManagerImp(observeOn, subscribeOn);
     }
 }

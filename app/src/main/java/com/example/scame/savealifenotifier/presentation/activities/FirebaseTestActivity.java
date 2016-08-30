@@ -22,7 +22,7 @@ public class FirebaseTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.firebase_test_layout);
 
-        startActivity(new Intent(this, HelpMeActivity.class));
+        startActivity(new Intent(this, PageActivity.class));
 
         ButterKnife.bind(this);
 
