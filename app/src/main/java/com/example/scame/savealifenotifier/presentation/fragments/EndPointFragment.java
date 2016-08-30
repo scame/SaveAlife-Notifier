@@ -82,15 +82,21 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("SaveAlife Map");
         ((PageActivity) getActivity()).getEndPointComponent().inject(this);
 
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        configureMapView(savedInstanceState);
+        configureAutocomplete();
 
         presenter.setView(this);
-        configureAutocomplete();
 
         morphToReady(morphButton, 0);
 
         return fragmentView;
+    }
+
+    private void configureMapView(Bundle savedInstanceState) {
+        Bundle mapViewSavedInstanceState = savedInstanceState != null ?
+                savedInstanceState.getBundle("mapViewSaveState") : null;
+        mapView.onCreate(mapViewSavedInstanceState);
+        mapView.getMapAsync(this);
     }
 
     @Override
@@ -125,9 +131,11 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+        Bundle mapViewSaveState = new Bundle(outState);
+        mapView.onSaveInstanceState(mapViewSaveState);
+        outState.putBundle("mapViewSaveState", mapViewSaveState);
 
-        mapView.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

@@ -28,7 +28,10 @@ public class PageActivity extends BaseActivity {
         setContentView(R.layout.page_activity);
 
         inject(getAppComponent());
-        replaceFragment(R.id.page_activity_fl, new HelpMeFragment(), HELP_ME_FRAG_TAG);
+
+        if (getSupportFragmentManager().findFragmentByTag(END_POINT_FRAG_TAG) == null) {
+            replaceFragment(R.id.page_activity_fl, new HelpMeFragment(), HELP_ME_FRAG_TAG);
+        }
     }
 
     @Override
