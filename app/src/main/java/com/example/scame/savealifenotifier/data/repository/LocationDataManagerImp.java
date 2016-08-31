@@ -1,12 +1,15 @@
 package com.example.scame.savealifenotifier.data.repository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.SaveAlifeApp;
-import com.example.scame.savealifenotifier.data.api.ServerApi;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
 import com.example.scame.savealifenotifier.domain.schedulers.ObserveOn;
 import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
@@ -18,7 +21,6 @@ import com.google.android.gms.location.LocationServices;
 
 import java.net.ConnectException;
 
-import retrofit2.Retrofit;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -34,8 +36,6 @@ public class LocationDataManagerImp implements ILocationDataManager, GoogleApiCl
     private Subscriber<? super LatLongPair> subscriber;
 
     private Subscription subscription;
-
-    private static final String SENDER_TYPE = "ambulance";
 
     private ObserveOn observeOn;
     private SubscribeOn subscribeOn;
@@ -117,13 +117,14 @@ public class LocationDataManagerImp implements ILocationDataManager, GoogleApiCl
     }
 
     @Override
-    public void sendLocationToServer(LatLongPair latLongPair) {
-        Retrofit retrofit = SaveAlifeApp.getAppComponent().getRetrofit();
-        ServerApi serverApi = retrofit.create(ServerApi.class);
+    public void saveCurrentLocation(LatLongPair latLongPair) {
+        Context context = SaveAlifeApp.getAppComponent().getApp();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
-        serverApi.sendLocationToServer(latLongPair.getLatitude() + "," + latLongPair.getLongitude())
-                .subscribeOn(subscribeOn.getScheduler())
-                .observeOn(observeOn.getScheduler())
-                .subscribe();
+        String latitude = String.valueOf(latLongPair.getLatitude());
+        String longitude = String.valueOf(latLongPair.getLongitude());
+
+        sp.edit().putString(latitude, context.getString(R.string.current_latitude)).apply();
+        sp.edit().putString(longitude, context.getString(R.string.current_longitude)).apply();
     }
 }

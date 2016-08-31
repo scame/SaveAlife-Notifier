@@ -11,7 +11,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
+import com.example.scame.savealifenotifier.data.repository.IFirebaseTokenManager;
 import com.example.scame.savealifenotifier.data.repository.ILocationDataManager;
+import com.example.scame.savealifenotifier.data.repository.IMessagesDataManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -30,8 +32,11 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
     private long FASTEST_INTERVAL = 2000;
     private long SMALLEST_DISPLACEMENT = 300;
 
-    @Inject
-    ILocationDataManager locationDataManager;
+    @Inject ILocationDataManager locationDataManager;
+
+    @Inject IMessagesDataManager messagesDataManager;
+
+    @Inject IFirebaseTokenManager tokenManager;
 
     @Override
     public void onCreate() {
@@ -64,15 +69,23 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
     public void onConnected(@Nullable Bundle bundle) {
 
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        sendLocationToServer(currentLocation);
+        handleLocationUpdate(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-        if (currentLocation != null) {
-            Log.i("DEBUG", "current location: " + currentLocation.toString());
-        }
+        Log.i("DEBUG", "current location: " + currentLocation.toString());
 
         startLocationUpdates();
     }
 
+    private void handleLocationUpdate(double latitude, double longitude) {
+        LatLongPair latLongPair = new LatLongPair(latitude, longitude);
+
+        locationDataManager.saveCurrentLocation(latLongPair);
+
+        // send only if token is already generated
+        if (!tokenManager.getActiveToken().equals("")) {
+            messagesDataManager.sendLocationMessage();
+        }
+    }
 
     @SuppressWarnings({"MissingPermission"})
     private void startLocationUpdates() {
@@ -97,14 +110,8 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
                 Double.toString(location.getLongitude());
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
-
-        sendLocationToServer(location);
+        handleLocationUpdate(location.getLatitude(), location.getLongitude());
     }
-
-    private void sendLocationToServer(Location location) {
-        locationDataManager.sendLocationToServer(new LatLongPair(location.getLatitude(), location.getLongitude()));
-    }
-
 
     @Override
     public void onDestroy() {

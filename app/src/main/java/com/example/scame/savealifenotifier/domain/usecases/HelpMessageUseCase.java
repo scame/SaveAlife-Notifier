@@ -10,20 +10,20 @@ import rx.Observable;
 
 public class HelpMessageUseCase extends UseCase<ResponseBody> {
 
-    private IMessagesDataManager dataManager;
+    private IMessagesDataManager messagesDataManager;
 
     private String message;
 
     public HelpMessageUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                              IMessagesDataManager dataManager) {
+                              IMessagesDataManager messagesDataManager) {
 
         super(subscribeOn, observeOn);
-        this.dataManager = dataManager;
+        this.messagesDataManager = messagesDataManager;
     }
 
     @Override
     protected Observable<ResponseBody> getUseCaseObservable() {
-        return dataManager.sendHelpMeMessage(message);
+        return messagesDataManager.sendHelpMeMessage(message);
     }
 
     public void setMessage(String message) {

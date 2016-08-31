@@ -1,5 +1,6 @@
 package com.example.scame.savealifenotifier.presentation.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.scame.savealifenotifier.FusedLocationService;
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.presentation.activities.PageActivity;
 import com.example.scame.savealifenotifier.presentation.presenters.IHelpMePresenter;
@@ -21,6 +23,15 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
 
     @Inject
     IHelpMePresenter<IHelpMePresenter.HelpMeView> presenter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (!isMyServiceRunning(FusedLocationService.class)) {
+            getActivity().startService(new Intent(getContext(), FusedLocationService.class));
+        }
+    }
 
     @Nullable
     @Override
@@ -38,7 +49,7 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
 
     @OnClick(R.id.help_me_btn)
     public void onHelpMeClick() {
-        presenter.sendHelpMessage("help me");
+        presenter.sendHelpMessage("help me test");
     }
 
     @Override

@@ -11,4 +11,8 @@
 
     <string name="old_token_key">oldToken</string>
     <string name="refreshed_token_key">refreshedToken</string>
+
+    <string name="current_latitude">currentLat</string>
+    <string name="current_longitude">currentLong</string>
+    <string name="is_driver">isDriver</string>
 </resources>

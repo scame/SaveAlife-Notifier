@@ -10,5 +10,5 @@ public interface ILocationDataManager {
 
     void stopLocationUpdates();
 
-    void sendLocationToServer(LatLongPair latLongPair);
+    void saveCurrentLocation(LatLongPair latLongPair);
 }
