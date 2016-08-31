@@ -267,9 +267,13 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
                 .setStyle(Style.HEADER_WITH_TITLE)
                 .setHeaderColor(R.color.theme_green_primary_dark)
                 .setDescription(description)
-                .setPositive(getString(R.string.dialog_positive), (dialog, which) -> simulateProgress(morphButton))
+                .setPositive(getString(R.string.dialog_positive), (dialog, which) -> {
+                    simulateProgress(morphButton);
+                    presenter.setupDestination(new LatLongPair(destination.latitude, destination.longitude));
+                })
                 .setNegative(getString(R.string.dialog_negative), (dialog, which) -> {
                     morphButtonClicked = !morphButtonClicked;
+                    presenter.stopDrivingMode();
                     dialog.dismiss();
                 })
                 .setCancelable(false)

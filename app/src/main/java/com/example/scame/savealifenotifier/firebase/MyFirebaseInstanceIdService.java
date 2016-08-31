@@ -3,20 +3,25 @@ package com.example.scame.savealifenotifier.firebase;
 import android.util.Log;
 
 import com.example.scame.savealifenotifier.SaveAlifeApp;
+import com.example.scame.savealifenotifier.data.repository.FirebaseTokenManagerImp;
 import com.example.scame.savealifenotifier.data.repository.IFirebaseTokenManager;
 import com.example.scame.savealifenotifier.data.repository.IMessagesDataManager;
+import com.example.scame.savealifenotifier.data.repository.MessagesDataManagerImp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-
-import javax.inject.Inject;
 
 public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
     private static final String TAG = "logTokenRefresh";
 
-    @Inject IFirebaseTokenManager tokenManager;
+    private IFirebaseTokenManager tokenManager;
 
-    @Inject IMessagesDataManager messagesDataManager;
+    private IMessagesDataManager messagesDataManager;
+
+    public MyFirebaseInstanceIdService() {
+        tokenManager = new FirebaseTokenManagerImp();
+        messagesDataManager = new MessagesDataManagerImp();
+    }
 
     @Override
     public void onTokenRefresh() {

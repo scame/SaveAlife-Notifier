@@ -54,7 +54,7 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         googleApiClient.connect();
-
+        Log.i("onxService", "started");
         return START_STICKY;
     }
 
@@ -83,7 +83,10 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
 
         // send only if token is already generated
         if (!tokenManager.getActiveToken().equals("")) {
-            messagesDataManager.sendLocationMessage();
+            Log.i("onxGonnaSend", "true");
+            //messagesDataManager.sendLocationMessage();
+        } else {
+            Log.i("onxNotGonna", "true");
         }
     }
 

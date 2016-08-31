@@ -19,4 +19,8 @@ public interface IEndPointPresenter<T> extends Presenter<T> {
     void computeDirection(LatLongPair origin, LatLongPair destination);
 
     void startLocationUpdates();
+
+    void setupDestination(LatLongPair latLongPair);
+
+    void stopDrivingMode();
 }

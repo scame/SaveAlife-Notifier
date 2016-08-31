@@ -7,8 +7,14 @@ import com.example.scame.savealifenotifier.domain.usecases.ComputeDirectionUseCa
 import com.example.scame.savealifenotifier.domain.usecases.DefaultSubscriber;
 import com.example.scame.savealifenotifier.domain.usecases.LocationUpdatesUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.ReverseGeocodeUseCase;
+import com.example.scame.savealifenotifier.domain.usecases.SetupDestinationUseCase;
+import com.example.scame.savealifenotifier.domain.usecases.StopDrivingModeUseCase;
 import com.example.scame.savealifenotifier.presentation.models.AddressModel;
 import com.example.scame.savealifenotifier.presentation.models.DirectionModel;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
 
 public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
         implements IEndPointPresenter<T> {
@@ -19,15 +25,23 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
 
     private LocationUpdatesUseCase locationUpdatesUseCase;
 
+    private SetupDestinationUseCase destinationUseCase;
+
+    private StopDrivingModeUseCase drivingModeUseCase;
+
     private T view;
 
     public EndPointPresenterImp(ReverseGeocodeUseCase reverseGeocodeUseCase,
-                                     ComputeDirectionUseCase computeDirectionUseCase,
-                                     LocationUpdatesUseCase locationUpdatesUseCase) {
+                                ComputeDirectionUseCase computeDirectionUseCase,
+                                LocationUpdatesUseCase locationUpdatesUseCase,
+                                SetupDestinationUseCase destinationUseCase,
+                                StopDrivingModeUseCase drivingModeUseCase) {
 
         this.reverseGeocodeUseCase = reverseGeocodeUseCase;
         this.computeDirectionUseCase = computeDirectionUseCase;
         this.locationUpdatesUseCase = locationUpdatesUseCase;
+        this.destinationUseCase = destinationUseCase;
+        this.drivingModeUseCase = drivingModeUseCase;
     }
 
     @Override
@@ -50,6 +64,17 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
     }
 
     @Override
+    public void setupDestination(LatLongPair latLongPair) {
+        destinationUseCase.setLatLongPair(latLongPair);
+        destinationUseCase.execute(new DestinationSubscriber());
+    }
+
+    @Override
+    public void stopDrivingMode() {
+        drivingModeUseCase.execute(new DrivingModeSubscriber());
+    }
+
+    @Override
     public void setView(T view) {
         this.view = view;
     }
@@ -67,6 +92,62 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
     @Override
     public void destroy() {
 
+    }
+
+    private final class DestinationSubscriber extends DefaultSubscriber<ResponseBody> {
+
+        @Override
+        public void onNext(ResponseBody responseBody) {
+            super.onNext(responseBody);
+
+            try {
+                Log.i("onNext", responseBody.string());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
+
+            Log.i("onCompleted", "completed");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+
+            Log.i("onError", e.getLocalizedMessage());
+        }
+    }
+
+    private final class DrivingModeSubscriber extends DefaultSubscriber<ResponseBody> {
+
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
+
+            Log.i("onCompleted", "completed");
+        }
+
+        @Override
+        public void onNext(ResponseBody responseBody) {
+            super.onNext(responseBody);
+
+            try {
+                Log.i("onNext", responseBody.string());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+
+            Log.i("onError", e.getLocalizedMessage());
+        }
     }
 
     private final class ReverseGeocodeSubscriber extends DefaultSubscriber<AddressModel> {
