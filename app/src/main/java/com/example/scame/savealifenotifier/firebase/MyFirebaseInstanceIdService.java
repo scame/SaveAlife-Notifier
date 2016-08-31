@@ -2,28 +2,32 @@ package com.example.scame.savealifenotifier.firebase;
 
 import android.util.Log;
 
+import com.example.scame.savealifenotifier.SaveAlifeApp;
+import com.example.scame.savealifenotifier.data.repository.IFirebaseTokenManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import javax.inject.Inject;
 
 public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
     private static final String TAG = "logTokenRefresh";
 
+    @Inject
+    IFirebaseTokenManager tokenManager;
+
     @Override
     public void onTokenRefresh() {
-        // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.i(TAG, "Refreshed token: " + refreshedToken);
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-        sendRegistrationToServer(refreshedToken);
-    }
-
-    private void sendRegistrationToServer(String refreshedToken) {
-
+        SaveAlifeApp.getAppComponent().inject(this);
+        cacheToken(refreshedToken);
     }
 
 
+    private void cacheToken(String token) {
+        tokenManager.saveOldToken(tokenManager.getActiveToken());
+        tokenManager.saveRefreshedToken(token);
+    }
 }

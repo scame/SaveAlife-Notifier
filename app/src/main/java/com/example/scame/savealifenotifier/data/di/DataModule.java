@@ -1,8 +1,10 @@
 package com.example.scame.savealifenotifier.data.di;
 
 import com.example.scame.savealifenotifier.data.repository.DirectionsDataManagerImp;
+import com.example.scame.savealifenotifier.data.repository.FirebaseTokenManagerImp;
 import com.example.scame.savealifenotifier.data.repository.GeocodingDataManagerImp;
 import com.example.scame.savealifenotifier.data.repository.IDirectionsDataManager;
+import com.example.scame.savealifenotifier.data.repository.IFirebaseTokenManager;
 import com.example.scame.savealifenotifier.data.repository.IGeocodingDataManager;
 import com.example.scame.savealifenotifier.data.repository.ILocationDataManager;
 import com.example.scame.savealifenotifier.data.repository.IMessagesDataManager;
@@ -66,5 +68,11 @@ public class DataModule {
     @Provides
     ILocationDataManager provideLocationDataManager(SubscribeOn subscribeOn, ObserveOn observeOn) {
         return new LocationDataManagerImp(observeOn, subscribeOn);
+    }
+
+    @Singleton
+    @Provides
+    IFirebaseTokenManager provideFirebaseTokenMnager() {
+        return new FirebaseTokenManagerImp();
     }
 }

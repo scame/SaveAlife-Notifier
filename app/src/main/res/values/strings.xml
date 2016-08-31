@@ -8,4 +8,7 @@
     <string name="dialog_title">Destination</string>
     <string name="dialog_positive">Yes</string>
     <string name="dialog_negative">No</string>
+
+    <string name="old_token_key">oldToken</string>
+    <string name="refreshed_token_key">refreshedToken</string>
 </resources>

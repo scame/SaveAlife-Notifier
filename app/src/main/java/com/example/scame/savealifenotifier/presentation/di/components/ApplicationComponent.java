@@ -8,6 +8,7 @@ import com.example.scame.savealifenotifier.data.di.DataModule;
 import com.example.scame.savealifenotifier.presentation.di.modules.ApplicationModule;
 import com.example.scame.savealifenotifier.presentation.di.modules.EndPointModule;
 import com.example.scame.savealifenotifier.presentation.di.modules.HelpMeModule;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import javax.inject.Singleton;
 
@@ -19,6 +20,8 @@ import retrofit2.Retrofit;
 public interface ApplicationComponent {
 
     void inject(FusedLocationService locationService);
+
+    void inject(FirebaseInstanceIdService instanceIdService);
 
     Application getApp();
 
