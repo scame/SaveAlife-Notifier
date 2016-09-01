@@ -124,7 +124,7 @@ public class LocationDataManagerImp implements ILocationDataManager, GoogleApiCl
         String latitude = String.valueOf(latLongPair.getLatitude());
         String longitude = String.valueOf(latLongPair.getLongitude());
 
-        sp.edit().putString(latitude, context.getString(R.string.current_latitude)).apply();
-        sp.edit().putString(longitude, context.getString(R.string.current_longitude)).apply();
+        sp.edit().putString(context.getString(R.string.current_latitude), latitude).apply();
+        sp.edit().putString(context.getString(R.string.current_longitude), longitude).apply();
     }
 }

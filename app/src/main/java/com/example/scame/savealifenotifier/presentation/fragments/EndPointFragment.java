@@ -1,7 +1,6 @@
 package com.example.scame.savealifenotifier.presentation.fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 
 import com.dd.morphingbutton.MorphingButton;
 import com.dd.morphingbutton.impl.LinearProgressButton;
-import com.example.scame.savealifenotifier.FusedLocationService;
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
 import com.example.scame.savealifenotifier.presentation.activities.PageActivity;
@@ -210,7 +208,7 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
         if (morphButtonClicked) {
             showConfirmDialog();
         } else {
-            getActivity().stopService(new Intent(getContext(), FusedLocationService.class));
+            // TODO: implement success button logic
             morphToReady(morphButton, integer(R.integer.mb_animation));
         }
     }
@@ -273,7 +271,6 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
                 })
                 .setNegative(getString(R.string.dialog_negative), (dialog, which) -> {
                     morphButtonClicked = !morphButtonClicked;
-                    presenter.stopDrivingMode();
                     dialog.dismiss();
                 })
                 .setCancelable(false)

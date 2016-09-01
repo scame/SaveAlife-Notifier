@@ -1,6 +1,10 @@
 package com.example.scame.savealifenotifier.data.api;
 
-import com.example.scame.savealifenotifier.data.entities.ServerMessageEntity;
+import com.example.scame.savealifenotifier.data.entities.DestinationEntity;
+import com.example.scame.savealifenotifier.data.entities.HelpMessageEntity;
+import com.example.scame.savealifenotifier.data.entities.LocationMessageEntity;
+import com.example.scame.savealifenotifier.data.entities.StatusEntity;
+import com.example.scame.savealifenotifier.data.entities.TokenUpdateEntity;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
@@ -10,18 +14,18 @@ import rx.Observable;
 
 public interface ServerApi {
 
+    @PUT("http://10.0.1.57:8080/rest/user")
+    Observable<ResponseBody> tokenUpdateRequest(@Body TokenUpdateEntity tokenEntity);
+
     @POST("http://10.0.1.57:8080/rest/send/")
-    Observable<ResponseBody> registrationRequest(@Body ServerMessageEntity messageEntity);
+    Observable<ResponseBody> sendLocationToServer(@Body LocationMessageEntity locationEntity);
+
+    @POST("http://10.0.1.57:8080/rest/send/")
+    Observable<ResponseBody> sendHelpMessage(@Body HelpMessageEntity helpEntity);
 
     @PUT("http://10.0.1.57:8080/rest/user")
-    Observable<ResponseBody> tokenUpdateRequest(@Body ServerMessageEntity messageEntity);
+    Observable<ResponseBody> changeStatus(@Body StatusEntity statusEntity);
 
     @POST("http://10.0.1.57:8080/rest/send/")
-    Observable<ResponseBody> sendLocationToServer(@Body ServerMessageEntity messageEntity);
-
-    @POST("http://10.0.1.57:8080/rest/send/")
-    Observable<ResponseBody> sendHelpMessage(@Body ServerMessageEntity messageEntity);
-
-    @PUT("http://10.0.1.57:8080/rest/user")
-    Observable<ResponseBody> changeStatus(@Body ServerMessageEntity messageEntity);
+    Observable<ResponseBody> sendDestination(@Body DestinationEntity destinationEntity);
 }

@@ -14,8 +14,6 @@ public interface IMessagesDataManager {
 
     Observable<ResponseBody> sendDestinationMessage(LatLongPair latLongPair);
 
-    Observable<ResponseBody> sendRegistrationRequest();
-
     Observable<ResponseBody> sendUpdateTokenRequest();
 
     Observable<ResponseBody> sendChangeStatusRequest(String status);

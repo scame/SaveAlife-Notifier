@@ -8,8 +8,12 @@ import android.preference.PreferenceManager;
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.SaveAlifeApp;
 import com.example.scame.savealifenotifier.data.api.ServerApi;
+import com.example.scame.savealifenotifier.data.entities.DestinationEntity;
+import com.example.scame.savealifenotifier.data.entities.HelpMessageEntity;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
-import com.example.scame.savealifenotifier.data.entities.ServerMessageEntity;
+import com.example.scame.savealifenotifier.data.entities.LocationMessageEntity;
+import com.example.scame.savealifenotifier.data.entities.StatusEntity;
+import com.example.scame.savealifenotifier.data.entities.TokenUpdateEntity;
 
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
@@ -36,76 +40,74 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
 
     @Override
     public Observable<ResponseBody> sendLocationMessage() {
-        return serverApi.sendLocationToServer(createLocationEntity());
+        LatLongPair latLong = getCurrentLatLong();
+
+        LocationMessageEntity locationEntity = new LocationMessageEntity();
+
+        locationEntity.setRole("driver");
+        locationEntity.setCurrentToken(tokenManager.getActiveToken());
+        locationEntity.setCurrentLat(latLong.getLatitude());
+        locationEntity.setCurrentLon(latLong.getLongitude());
+
+        return serverApi.sendLocationToServer(locationEntity);
     }
 
     @Override
     public Observable<ResponseBody> sendHelpMeMessage(String helpMessage) {
-        return serverApi.sendHelpMessage(createHelpMeEntity(helpMessage));
+        LatLongPair latLong = getCurrentLatLong();
+
+        HelpMessageEntity helpMessageEntity = new HelpMessageEntity();
+
+        helpMessageEntity.setCurrentToken(tokenManager.getActiveToken());
+        helpMessageEntity.setRole("person");
+        helpMessageEntity.setCurrentLon(latLong.getLongitude());
+        helpMessageEntity.setCurrentLat(latLong.getLatitude());
+        helpMessageEntity.setMessage(helpMessage);
+
+        return serverApi.sendHelpMessage(helpMessageEntity);
     }
 
 
     @Override
-    public Observable<ResponseBody> sendDestinationMessage(LatLongPair latLongPair) {
-        return serverApi.sendLocationToServer(createDestinationEntity(latLongPair));
-    }
+    public Observable<ResponseBody> sendDestinationMessage(LatLongPair destination) {
+        LatLongPair currentLatLong = getCurrentLatLong();
 
+        DestinationEntity destinationEntity = new DestinationEntity();
 
-    @Override
-    public Observable<ResponseBody> sendRegistrationRequest() {
-        ServerMessageEntity messageEntity = new ServerMessageEntity();
-        messageEntity.setCurrentToken(tokenManager.getActiveToken());
+        destinationEntity.setCurrentLat(currentLatLong.getLatitude());
+        destinationEntity.setCurrentLon(currentLatLong.getLongitude());
+        destinationEntity.setDestinationLat(destination.getLatitude());
+        destinationEntity.setDestinationLon(destination.getLongitude());
+        destinationEntity.setCurrentToken(tokenManager.getActiveToken());
+        destinationEntity.setRole("driver");
 
-        return serverApi.registrationRequest(messageEntity);
+        return serverApi.sendDestination(destinationEntity);
     }
 
 
     @Override
     public Observable<ResponseBody> sendUpdateTokenRequest() {
-        ServerMessageEntity messageEntity = new ServerMessageEntity();
+        TokenUpdateEntity tokenUpdateEntity = new TokenUpdateEntity();
 
-        messageEntity.setCurrentToken(tokenManager.getActiveToken());
-        messageEntity.setOldToken(tokenManager.getOldToken());
+        tokenUpdateEntity.setCurrentToken(tokenManager.getActiveToken());
+        tokenUpdateEntity.setOldToken(tokenManager.getOldToken());
 
-        return serverApi.tokenUpdateRequest(messageEntity);
+        return serverApi.tokenUpdateRequest(tokenUpdateEntity);
     }
 
     @Override
     public Observable<ResponseBody> sendChangeStatusRequest(String status) {
-        ServerMessageEntity messageEntity = new ServerMessageEntity();
+        StatusEntity statusEntity = new StatusEntity();
+        statusEntity.setCurrentToken(tokenManager.getActiveToken());
+        statusEntity.setRole("person");
 
-        messageEntity.setCurrentToken(tokenManager.getActiveToken());
-        messageEntity.setRole(status);
-
-        return serverApi.changeStatus(messageEntity);
+        return serverApi.changeStatus(statusEntity);
     }
 
-    private ServerMessageEntity createLocationEntity() {
+    private LatLongPair getCurrentLatLong() {
         double latitude = Double.valueOf(sharedPrefs.getString(context.getString(R.string.current_latitude), ""));
         double longitude = Double.valueOf(sharedPrefs.getString(context.getString(R.string.current_longitude), ""));
 
-        ServerMessageEntity messageEntity = new ServerMessageEntity();
-        messageEntity.setCurrentToken(tokenManager.getActiveToken());
-        messageEntity.setCurrentLat(latitude);
-        messageEntity.setCurrentLon(longitude);
-
-        return messageEntity;
-    }
-
-    private ServerMessageEntity createDestinationEntity(LatLongPair latLongPair) {
-        ServerMessageEntity messageEntity = createLocationEntity();
-        messageEntity.setRole("driver");
-        messageEntity.setDestinationLon(latLongPair.getLongitude());
-        messageEntity.setDestinationLat(latLongPair.getLatitude());
-
-        return messageEntity;
-    }
-
-    private ServerMessageEntity createHelpMeEntity(String message) {
-        ServerMessageEntity messageEntity = createLocationEntity();
-        messageEntity.setMessage(message);
-        messageEntity.setRole("person");
-
-        return messageEntity;
+        return new LatLongPair(latitude, longitude);
     }
 }

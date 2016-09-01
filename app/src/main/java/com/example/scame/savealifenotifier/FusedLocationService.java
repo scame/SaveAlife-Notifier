@@ -22,14 +22,17 @@ import com.google.android.gms.location.LocationServices;
 
 import javax.inject.Inject;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public class FusedLocationService extends Service implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
     private GoogleApiClient googleApiClient;
 
-    private long UPDATE_INTERVAL = 10 * 1000;
-    private long FASTEST_INTERVAL = 2000;
+    private long UPDATE_INTERVAL = 20 * 1000;
+    private long FASTEST_INTERVAL = 5000;
     private long SMALLEST_DISPLACEMENT = 300;
 
     @Inject ILocationDataManager locationDataManager;
@@ -54,7 +57,6 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         googleApiClient.connect();
-        Log.i("onxService", "started");
         return START_STICKY;
     }
 
@@ -83,10 +85,10 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
 
         // send only if token is already generated
         if (!tokenManager.getActiveToken().equals("")) {
-            Log.i("onxGonnaSend", "true");
-            //messagesDataManager.sendLocationMessage();
-        } else {
-            Log.i("onxNotGonna", "true");
+            messagesDataManager.sendLocationMessage()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(responseBody -> Log.i("onNextSend", "success"));
         }
     }
 
@@ -95,8 +97,8 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
         LocationRequest locationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setFastestInterval(FASTEST_INTERVAL)
-                .setInterval(UPDATE_INTERVAL)
-                .setSmallestDisplacement(SMALLEST_DISPLACEMENT);
+                .setInterval(UPDATE_INTERVAL);
+            //    .setSmallestDisplacement(SMALLEST_DISPLACEMENT);
 
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
     }

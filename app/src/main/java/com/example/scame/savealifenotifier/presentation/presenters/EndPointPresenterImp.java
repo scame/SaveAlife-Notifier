@@ -101,7 +101,7 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
             super.onNext(responseBody);
 
             try {
-                Log.i("onNext", responseBody.string());
+                Log.i("onxDestNext", responseBody.string());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -111,14 +111,14 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
         public void onCompleted() {
             super.onCompleted();
 
-            Log.i("onCompleted", "completed");
+            Log.i("onxDestCompleted", "completed");
         }
 
         @Override
         public void onError(Throwable e) {
             super.onError(e);
 
-            Log.i("onError", e.getLocalizedMessage());
+            Log.i("onxDestError", e.getLocalizedMessage());
         }
     }
 
