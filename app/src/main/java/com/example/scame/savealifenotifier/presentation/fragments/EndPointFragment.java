@@ -11,6 +11,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,8 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
 
     private static final int CIRCLE_RADIUS = 250;
 
+    private static View fragmentView;
+
     @BindView(R.id.morph_btn) LinearProgressButton morphButton;
     @BindView(R.id.mapview) MapView mapView;
 
@@ -73,7 +76,17 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.end_point_fragment, container, false);
+        if (fragmentView != null) {
+            ViewGroup parent = (ViewGroup) fragmentView.getParent();
+            if (parent != null)
+                parent.removeView(fragmentView);
+        }
+
+        try {
+            fragmentView = inflater.inflate(R.layout.end_point_fragment, container, false);
+        } catch (InflateException e) {
+            /* map is already there, just return view as it is */
+        }
 
         ButterKnife.bind(this, fragmentView);
 

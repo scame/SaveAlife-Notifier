@@ -87,8 +87,8 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
         if (!tokenManager.getActiveToken().equals("")) {
             messagesDataManager.sendLocationMessage()
                     .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(responseBody -> Log.i("onNextSend", "success"));
+                    .observeOn(AndroidSchedulers.mainThread());
+                //    .subscribe(responseBody -> Log.i("onNextSend", "done"));
         }
     }
 

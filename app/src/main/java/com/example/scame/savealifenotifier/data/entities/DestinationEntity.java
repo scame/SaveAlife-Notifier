@@ -7,13 +7,13 @@ public class DestinationEntity {
 
     private String role;
 
-    private double currentLat;
+    private Double currentLat;
 
-    private double currentLon;
+    private Double currentLon;
 
-    private double destinationLat;
+    private Double destinationLat;
 
-    private double destinationLon;
+    private Double destinationLon;
 
     public void setCurrentToken(String currentToken) {
         this.currentToken = currentToken;
