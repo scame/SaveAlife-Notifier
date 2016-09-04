@@ -27,6 +27,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".presentation.activities.DriversHelpMapActivity" />
+        <activity android:name=".presentation.activities.GoogleHelpMapActivity" />
+
         <service
             android:name=".firebase.MyFirebaseMessagingService">
             <intent-filter>
