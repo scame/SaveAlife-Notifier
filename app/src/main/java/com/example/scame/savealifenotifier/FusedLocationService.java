@@ -8,7 +8,6 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
 import com.example.scame.savealifenotifier.data.repository.IFirebaseTokenManager;
@@ -110,10 +109,10 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
 
     @Override
     public void onLocationChanged(Location location) {
-        String msg = "Updated Location: " +
+        /*String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();*/
 
         handleLocationUpdate(location.getLatitude(), location.getLongitude());
     }

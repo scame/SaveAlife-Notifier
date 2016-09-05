@@ -8,4 +8,8 @@
     <color name="theme_green_background">#dce2ca</color>
     <color name="theme_green_accent">#92b100</color>
     <color name="theme_green_text">@color/text_dark</color>
+
+    <color name="pulsator_red">#d17ca0</color>
+    <color name="splash_stroke">#E64A19</color>
+    <color name="splash_fill">#FF5722</color>
 </resources>

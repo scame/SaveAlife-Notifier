@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -57,7 +56,7 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
     @BindView(R.id.morph_btn) LinearProgressButton morphButton;
     @BindView(R.id.mapview) MapView mapView;
 
-    private boolean morphButtonClicked = false;
+    private boolean morphButtonClicked;
 
     private GoogleMap googleMap;
 
@@ -90,7 +89,6 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
 
         ButterKnife.bind(this, fragmentView);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("SaveAlife Map");
         ((PageActivity) getActivity()).getEndPointComponent().inject(this);
 
         configureMapView(savedInstanceState);

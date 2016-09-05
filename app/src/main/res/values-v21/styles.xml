@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--  Base application theme.  -->
-    <style name="SaveALifeTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="SaveALifeTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:textColorPrimary">@android:color/black</item>
         <item name="android:textColorPrimaryInverse">@color/text_light</item>
         <item name="android:textColor">@color/text_dark</item>

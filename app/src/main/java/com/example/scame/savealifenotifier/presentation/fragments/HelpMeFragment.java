@@ -3,7 +3,6 @@ package com.example.scame.savealifenotifier.presentation.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +15,21 @@ import com.example.scame.savealifenotifier.presentation.presenters.IHelpMePresen
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.HelpMeView {
 
+    private static final int PULSE_COUNT = 4;
+    private static final int PULSE_DURATION = 7000;
+
     @Inject
     IHelpMePresenter<IHelpMePresenter.HelpMeView> presenter;
+
+    @BindView(R.id.help_me_end_btn) PulsatorLayout pulsatorGreen;
+    @BindView(R.id.help_me_start_btn) PulsatorLayout pulsatorRed;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,18 +45,40 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.help_me_fragment, container, false);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("SaveAlife HelpMe");
         ((PageActivity) getActivity()).getHelpMeComponent().inject(this);
 
         ButterKnife.bind(this, fragmentView);
         presenter.setView(this);
 
+        configurePulsator();
+
         return fragmentView;
     }
 
-    @OnClick(R.id.help_me_btn)
-    public void onHelpMeClick() {
+    private void configurePulsator() {
+        pulsatorGreen.setCount(PULSE_COUNT);
+        pulsatorGreen.setDuration(PULSE_DURATION);
+        pulsatorGreen.start();
+
+        pulsatorRed.setCount(PULSE_COUNT);
+        pulsatorRed.setDuration(PULSE_DURATION);
+        pulsatorRed.start();
+    }
+
+
+    @OnClick(R.id.help_me_start_btn)
+    public void onHelpMeClickStart() {
         presenter.sendHelpMessage("help me test");
+
+        pulsatorGreen.setVisibility(View.VISIBLE);
+        pulsatorRed.setVisibility(View.INVISIBLE);
+    }
+
+    @OnClick(R.id.help_me_end_btn)
+    public void onHelpMeClickEnd() {
+        // TODO: send an end message
+        pulsatorRed.setVisibility(View.VISIBLE);
+        pulsatorGreen.setVisibility(View.INVISIBLE);
     }
 
     @Override

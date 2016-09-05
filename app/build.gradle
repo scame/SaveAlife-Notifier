@@ -58,6 +58,10 @@ dependencies {
 
     compile 'com.github.dmytrodanylyk:android-morphing-button:98a4986e56'
     compile 'com.github.javiersantos:MaterialStyledDialogs:1.5.5'
+
+    compile 'hanks.xyz:htextview-library:0.1.5'
+    compile 'com.github.jorgecastilloprz:fillableloaders:1.03@aar'
+    compile 'pl.bclogic:pulsator4droid:1.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
