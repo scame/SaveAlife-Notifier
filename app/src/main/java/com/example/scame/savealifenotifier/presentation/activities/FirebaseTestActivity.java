@@ -1,6 +1,5 @@
 package com.example.scame.savealifenotifier.presentation.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,7 +21,7 @@ public class FirebaseTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.firebase_test_layout);
 
-        startActivity(new Intent(this, PageActivity.class));
+        //startActivity(new Intent(this, PageActivity.class));
 
         ButterKnife.bind(this);
 

@@ -10,14 +10,14 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.example.scame.savealifenotifier.R;
+import com.example.scame.savealifenotifier.data.mappers.DriverMessageMapper;
+import com.example.scame.savealifenotifier.data.mappers.HelpMessageMapper;
 import com.example.scame.savealifenotifier.presentation.activities.DriversHelpMapActivity;
 import com.example.scame.savealifenotifier.presentation.activities.GoogleHelpMapActivity;
 import com.example.scame.savealifenotifier.presentation.models.DriversMessageModel;
 import com.example.scame.savealifenotifier.presentation.models.HelpMessageModel;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -34,21 +34,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.i(TAG, "Message data payload: " + remoteMessage.getData());
-            // TODO: determine message type & display a notification
+
+            // path key's available only in driver's type messages
+            if (remoteMessage.getData().keySet().contains("path")) {
+                DriverMessageMapper driverMessageMapper = new DriverMessageMapper();
+                DriversMessageModel driversMessageModel  = driverMessageMapper.convert(remoteMessage.getData());
+
+                sendDriversNotification(driversMessageModel);
+            } else {
+                HelpMessageMapper helpMessageMapper = new HelpMessageMapper();
+                HelpMessageModel helpMessageModel = helpMessageMapper.convert(remoteMessage.getData());
+
+                sendCommonNotification(helpMessageModel);
+            }
         }
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.i(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            // TODO: determine message type & display a notification
         }
     }
 
 
-    private void sendCommonNotification(String messageBody) {
-        Gson gson = new GsonBuilder().create();
-        HelpMessageModel helpMessage = gson.fromJson(messageBody, HelpMessageModel.class);
+    private void sendCommonNotification(HelpMessageModel helpMessage) {
 
         Intent intent = new Intent(this, GoogleHelpMapActivity.class);
         intent.putExtra(GoogleHelpMapActivity.class.getCanonicalName(), helpMessage);
@@ -71,17 +79,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mNotificationManager.notify(COMMON_MSG_ID, builder.build());
     }
 
-    private void sendDriversNotification(String messageBody) {
-        Gson gson = new GsonBuilder().create();
-        DriversMessageModel messageModel = gson.fromJson(messageBody, DriversMessageModel.class);
+    private void sendDriversNotification(DriversMessageModel messageModel) {
 
         Intent intent = new Intent(this, DriversHelpMapActivity.class);
-        intent.putExtra(DriversHelpMapActivity.class.getCanonicalName(), messageBody);
+        intent.putExtra(DriversHelpMapActivity.class.getCanonicalName(), messageModel);
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_autorenew_black_24dp)
                         .setContentTitle("Driver, someone needs help")
-                        .setContentText(messageModel.getMessage());
+                        .setContentText(messageModel.getMessageBody());
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(DriversHelpMapActivity.class);

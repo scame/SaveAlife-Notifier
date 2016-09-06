@@ -3,17 +3,36 @@ package com.example.scame.savealifenotifier.presentation.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.scame.savealifenotifier.data.entities.LatLongPair;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class DriversMessageModel implements Parcelable {
 
-    private String message;
+    private String messageBody;
 
-    public void setMessage(String message) {
-        this.message = message;
+    private List<LatLongPair> path;
+
+    public DriversMessageModel() {
+        path = new ArrayList<>();
     }
 
-    public String getMessage() {
-        return message;
+    public void setPath(List<LatLongPair> path) {
+        this.path = path;
+    }
+
+    public void setMessageBody(String messageBody) {
+        this.messageBody = messageBody;
+    }
+
+    public String getMessageBody() {
+        return messageBody;
+    }
+
+    public List<LatLongPair> getPath() {
+        return path;
     }
 
     protected DriversMessageModel(Parcel in) { }

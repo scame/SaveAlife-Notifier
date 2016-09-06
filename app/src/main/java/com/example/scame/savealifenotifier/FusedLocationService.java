@@ -70,9 +70,11 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
     public void onConnected(@Nullable Bundle bundle) {
 
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        handleLocationUpdate(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-        Log.i("DEBUG", "current location: " + currentLocation.toString());
+        if (currentLocation != null) {
+            handleLocationUpdate(currentLocation.getLatitude(), currentLocation.getLongitude());
+            Log.i("DEBUG", "current location: " + currentLocation.toString());
+        }
 
         startLocationUpdates();
     }
