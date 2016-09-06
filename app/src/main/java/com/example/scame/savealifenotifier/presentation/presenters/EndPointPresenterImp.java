@@ -60,6 +60,7 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
 
     @Override
     public void startLocationUpdates() {
+        Log.i("onxLocationUpdates", "started");
         locationUpdatesUseCase.execute(new LocationUpdatesSubscriber());
     }
 
@@ -186,6 +187,13 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
 
             Log.i("onxNext", latLongPair.getLatitude() + "," + latLongPair.getLongitude());
             view.updateCurrentLocation(latLongPair);
+        }
+
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
+
+            Log.i("onxCompleted", "true");
         }
     }
 }

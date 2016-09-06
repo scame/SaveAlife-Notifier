@@ -104,14 +104,14 @@ public class PageActivity extends BaseActivity {
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+        clicked = savedInstanceState.getBoolean(CLICK_VALUE);
+
         if (savedInstanceState.getBoolean(CLICK_VALUE)) {
             currentPageView.animateText(helpMeText);
             nextPageView.animateText(mapText);
-            replaceFragment(R.id.page_activity_fl, new HelpMeFragment(), HELP_ME_FRAG_TAG);
         } else {
             currentPageView.animateText(mapText);
             nextPageView.animateText(helpMeText);
-            replaceFragment(R.id.page_activity_fl, new EndPointFragment(), END_POINT_FRAG_TAG);
         }
     }
 }
