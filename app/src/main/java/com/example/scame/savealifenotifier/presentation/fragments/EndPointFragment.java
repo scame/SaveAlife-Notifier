@@ -228,6 +228,13 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
                     .strokeColor(R.color.theme_green_primary_dark)
                     .center(new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude()))
                     .radius(CIRCLE_RADIUS));
+
+            if (destination != null) {
+                presenter.computeDirection(
+                        new LatLongPair(currentPosition.latitude, currentPosition.longitude),
+                        new LatLongPair(destination.latitude, destination.longitude)
+                );
+            }
         }
     }
 
