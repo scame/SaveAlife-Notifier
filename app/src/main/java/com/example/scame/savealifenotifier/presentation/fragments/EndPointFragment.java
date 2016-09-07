@@ -1,6 +1,7 @@
 package com.example.scame.savealifenotifier.presentation.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
@@ -40,6 +41,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -69,12 +73,16 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
 
     private Marker destinationMarker;
 
+    private Bundle savedInstanceState;
+
     @Inject
     IEndPointPresenter<IEndPointPresenter.EndPointView> presenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.savedInstanceState = savedInstanceState;
+
         if (fragmentView != null) {
             ViewGroup parent = (ViewGroup) fragmentView.getParent();
             if (parent != null)
@@ -99,6 +107,23 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
         morphToReady(morphButton, 0);
 
         return fragmentView;
+    }
+
+    private void configureAutocomplete() {
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                updateDestinationPoint(place.getLatLng());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.i("LOG_TAG", "An error occurred: " + status);
+            }
+        });
     }
 
     private void configureMapView(Bundle savedInstanceState) {
@@ -138,11 +163,50 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
         mapView.onDestroy();
     }
 
+
+    @Override
+    @SuppressWarnings({"MissingPermission"})
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+
+        googleMap.setOnMapLongClickListener(this::updateDestinationPoint);
+
+        if (savedInstanceState != null) {
+            List<LatLng> pathList = savedInstanceState.getParcelableArrayList(getString(R.string.path_key));
+            LatLng currentLocation = savedInstanceState.getParcelable(getString(R.string.current_location_key));
+            LatLng destination = savedInstanceState.getParcelable(getString(R.string.destination_key));
+
+            if (pathList != null) {
+                currentPolyline = googleMap.addPolyline(new PolylineOptions().addAll(pathList));
+            }
+            if (currentLocation != null) {
+                updateCurrentLocation(new LatLongPair(currentLocation.latitude, currentLocation.longitude));
+            }
+            if (destination != null) {
+                destinationMarker = googleMap.addMarker(new MarkerOptions().position(destination));
+                this.destination = destination;
+            }
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Bundle mapViewSaveState = new Bundle(outState);
         mapView.onSaveInstanceState(mapViewSaveState);
         outState.putBundle("mapViewSaveState", mapViewSaveState);
+
+        if (currentPolyline != null) {
+            outState.putParcelableArrayList(getString(R.string.path_key),
+                    new ArrayList<>(currentPolyline.getPoints()));
+        }
+
+        if (currentPosition != null) {
+            outState.putParcelable(getString(R.string.current_location_key), currentPosition);
+        }
+
+        if (destination != null) {
+            outState.putParcelable(getString(R.string.destination_key), destination);
+        }
 
         super.onSaveInstanceState(outState);
     }
@@ -167,38 +231,6 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
         }
     }
 
-    private void configureAutocomplete() {
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                updateDestinationPoint(place.getLatLng());
-            }
-
-            @Override
-            public void onError(Status status) {
-                Log.i("LOG_TAG", "An error occurred: " + status);
-            }
-        });
-    }
-
-    @OnClick(R.id.my_location_fab)
-    public void onLocationFabClick() {
-        if (currentPosition != null & googleMap != null) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 14));
-        }
-    }
-
-    @Override
-    @SuppressWarnings({"MissingPermission"})
-    public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
-
-        googleMap.setOnMapLongClickListener(this::updateDestinationPoint);
-    }
-
     private void updateDestinationPoint(LatLng latLng) {
         this.destination = latLng;
 
@@ -210,6 +242,13 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
 
         presenter.computeDirection(new LatLongPair(currentPosition.latitude, currentPosition.longitude),
                 new LatLongPair(destination.latitude, destination.longitude));
+    }
+
+    @OnClick(R.id.my_location_fab)
+    public void onLocationFabClick() {
+        if (currentPosition != null & googleMap != null) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 14));
+        }
     }
 
     @OnClick(R.id.morph_btn)
@@ -314,7 +353,7 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
             currentPolyline.remove();
         }
 
-        currentPolyline = googleMap.addPolyline(polyline);
+        currentPolyline = googleMap.addPolyline(polyline.color(Color.BLACK));
     }
 
     private int dimen(@DimenRes int resId) {

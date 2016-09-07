@@ -1,6 +1,9 @@
 package com.example.scame.savealifenotifier.data.entities;
 
-public class LatLongPair {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class LatLongPair implements Parcelable {
 
     private double latitude;
     private double longitude;
@@ -25,4 +28,33 @@ public class LatLongPair {
     public double getLongitude() {
         return longitude;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+    }
+
+    protected LatLongPair(Parcel in) {
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+    }
+
+    public static final Creator<LatLongPair> CREATOR = new Creator<LatLongPair>() {
+        @Override
+        public LatLongPair createFromParcel(Parcel in) {
+            return new LatLongPair(in);
+        }
+
+        @Override
+        public LatLongPair[] newArray(int size) {
+            return new LatLongPair[size];
+        }
+    };
+
 }

@@ -15,4 +15,9 @@
     <string name="current_latitude">currentLat</string>
     <string name="current_longitude">currentLong</string>
     <string name="is_driver">isDriver</string>
+
+    <string name="current_location_key">currentLocation</string>
+    <string name="destination_key">destination</string>
+    <string name="path_key">pathKey</string>
+
 </resources>

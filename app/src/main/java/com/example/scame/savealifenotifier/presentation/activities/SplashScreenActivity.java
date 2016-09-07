@@ -33,7 +33,6 @@ public class SplashScreenActivity extends AppCompatActivity implements OnStateCh
 
     @Override
     public void onStateChange(int state) {
-
         switch (state) {
             case State.STROKE_STARTED:
                 fillableLoaderText.start();
