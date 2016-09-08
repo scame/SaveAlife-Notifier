@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_margin="16dp"
-            android:textColor="@color/text_light" />
+            android:textColor="@color/colorText" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/my_location_fab"

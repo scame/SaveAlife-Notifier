@@ -1,17 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="SaveALifeTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:textColorPrimary">@android:color/black</item>
-        <item name="android:textColorPrimaryInverse">@color/text_light</item>
-        <item name="android:textColor">@color/text_dark</item>
-    </style>
-    <style name="SaveALifeTheme.Green" parent="SaveALifeTheme">
-        <item name="colorPrimary">@color/theme_green_primary</item>
-        <item name="colorPrimaryDark">@color/theme_green_primary_dark</item>
-        <item name="android:textColorPrimary">@color/theme_green_text</item>
-        <item name="android:windowBackground">@color/theme_green_background</item>
-        <item name="colorAccent">@color/theme_green_accent</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"><!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
     </style>
 
 </resources>

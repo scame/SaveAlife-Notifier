@@ -14,7 +14,7 @@
         app:pulse_count="4"
         app:pulse_duration="7000"
         app:pulse_repeat="0"
-        app:pulse_color="?colorPrimary"
+        app:pulse_color="@color/colorAccent"
         app:pulse_startFromScratch="false"
         android:visibility="invisible">
 
@@ -28,7 +28,7 @@
         app:pulse_count="4"
         app:pulse_duration="7000"
         app:pulse_repeat="0"
-        app:pulse_color="@color/pulsator_red"
+        app:pulse_color="@color/colorPrimary"
         app:pulse_startFromScratch="false">
 
 

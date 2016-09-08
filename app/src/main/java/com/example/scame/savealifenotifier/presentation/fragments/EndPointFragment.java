@@ -224,8 +224,8 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
             currentPositionMarker = googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude())));
             currentPositionCircle = googleMap.addCircle(new CircleOptions()
-                    .fillColor(R.color.theme_green_primary)
-                    .strokeColor(R.color.theme_green_primary_dark)
+                    .fillColor(R.color.colorPrimary)
+                    .strokeColor(R.color.colorPrimaryDark)
                     .center(new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude()))
                     .radius(CIRCLE_RADIUS));
 
@@ -277,8 +277,8 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
                 .cornerRadius(dimen(R.dimen.mb_corner_radius_2))
                 .width(dimen(R.dimen.mb_width_100))
                 .height(dimen(R.dimen.mb_height_56))
-                .color(color(R.color.theme_green_primary))
-                .colorPressed(color(R.color.theme_green_primary_dark));
+                .color(color(R.color.colorAccent))
+                .colorPressed(color(R.color.colorAccent));
 
         btnMorph.morph(square);
     }
@@ -290,15 +290,15 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
                 .cornerRadius(dimen(R.dimen.mb_height_56))
                 .width(dimen(R.dimen.mb_width_120))
                 .height(dimen(R.dimen.mb_height_56))
-                .color(color(R.color.theme_green_primary))
-                .colorPressed(color(R.color.theme_green_primary_dark))
+                .color(color(R.color.colorAccent))
+                .colorPressed(color(R.color.colorAccent))
                 .icon(R.drawable.ic_done);
 
         btnMorph.morph(circle);
     }
 
     private void simulateProgress(@NonNull final LinearProgressButton button) {
-        int progressColor = color(R.color.theme_green_accent);
+        int progressColor = color(R.color.colorAccent);
         int color = color(R.color.mb_gray);
         int progressCornerRadius = dimen(R.dimen.mb_corner_radius_4);
         int width = dimen(R.dimen.mb_width_200);
@@ -320,7 +320,7 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
                 .withDialogAnimation(true)
                 .setTitle(getString(R.string.dialog_title))
                 .setStyle(Style.HEADER_WITH_TITLE)
-                .setHeaderColor(R.color.theme_green_primary_dark)
+                .setHeaderColor(R.color.colorPrimaryDark)
                 .setDescription(description)
                 .setPositive(getString(R.string.dialog_positive), (dialog, which) -> {
                     simulateProgress(morphButton);

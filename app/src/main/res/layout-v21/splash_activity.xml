@@ -22,11 +22,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:fl_clippingTransform="waves"
-            app:fl_fillColor="@color/splash_fill"
+            app:fl_fillColor="@color/colorPrimary"
             app:fl_fillDuration="1000"
             app:fl_originalHeight="515"
             app:fl_originalWidth="522"
-            app:fl_strokeColor="@color/splash_stroke"
+            app:fl_strokeColor="@color/colorPrimaryDark"
             app:fl_strokeDrawingDuration="2000" />
     </RelativeLayout>
 
@@ -45,11 +45,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:fl_clippingTransform="plain"
-            app:fl_fillColor="@color/splash_fill"
+            app:fl_fillColor="@color/colorPrimary"
             app:fl_fillDuration="2000"
             app:fl_originalHeight="126"
             app:fl_originalWidth="679"
-            app:fl_strokeColor="@color/splash_stroke"
+            app:fl_strokeColor="@color/colorPrimaryDark"
             app:fl_strokeDrawingDuration="2000" />
     </RelativeLayout>
 </LinearLayout>

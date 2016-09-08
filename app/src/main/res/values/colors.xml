@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorTransparent">#64000000</color>
-    <color name="text_light">#f4f4f4</color>
-    <color name="text_dark">#616161</color>
-    <color name="theme_green_primary_dark">#4b7819</color>
-    <color name="theme_green_primary">#72ba3b</color>
-    <color name="theme_green_background">#dce2ca</color>
-    <color name="theme_green_accent">#92b100</color>
-    <color name="theme_green_text">@color/text_dark</color>
-
-    <color name="pulsator_red">#d17ca0</color>
-    <color name="splash_stroke">#E64A19</color>
-    <color name="splash_fill">#FF5722</color>
+    <color name="colorPrimary">#F44336</color>
+    <color name="colorPrimaryDark">#D32F2F</color>
+    <color name="colorPrimaryLight">#FFCDD2</color>
+    <color name="colorAccent">#4CAF50</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#757575</color>
+    <color name="colorText">#FFFFFF</color>
+    <color name="colorDivider">#BDBDBD</color>
+    <color name="colorBackground">@color/colorText</color>
 </resources>
