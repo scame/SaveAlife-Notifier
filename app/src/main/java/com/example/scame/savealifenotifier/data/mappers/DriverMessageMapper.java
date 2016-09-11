@@ -1,8 +1,8 @@
 package com.example.scame.savealifenotifier.data.mappers;
 
 
-import com.example.scame.savealifenotifier.data.entities.LatLongPair;
 import com.example.scame.savealifenotifier.presentation.models.DriversMessageModel;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,18 +32,18 @@ public class DriverMessageMapper {
             } else if (key.equals(PATH)) {
                 try {
                     JSONArray jsonArray = new JSONArray(remoteMessage.get(key));
-                    List<LatLongPair> latLongPairList = new ArrayList<>();
+                    List<LatLng> latLngList = new ArrayList<>();
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                        String latitude = jsonObject.getString("latitude");
-                        String longitude = jsonObject.getString("longitude");
-                        LatLongPair latLongPair = new LatLongPair(Double.valueOf(latitude), Double.valueOf(longitude));
-                        latLongPairList.add(latLongPair);
+                        Double latitude = jsonObject.getDouble("latitude");
+                        Double longitude = jsonObject.getDouble("longitude");
+                        LatLng latLng = new LatLng(latitude, longitude);
+                        latLngList.add(latLng);
                     }
 
-                    messageModel.setPath(latLongPairList);
+                    messageModel.setPath(latLngList);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

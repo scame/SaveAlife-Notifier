@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class HelpMessageMapper {
 
-    private static final String MESSAGE_KEY = "message";
+    private static final String MESSAGE_KEY = "messageBody";
     private static final String LAT_KEY = "latitude";
     private static final String LONG_KEY = "longitude";
 

@@ -63,7 +63,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_autorenew_black_24dp)
-                        .setContentTitle("Someone needs help")
+                        .setContentTitle("global: someone needs help")
                         .setContentText(helpMessage.getMessage());
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -86,7 +86,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_autorenew_black_24dp)
-                        .setContentTitle("Driver, someone needs help")
+                        .setContentTitle("drivers: someone needs help")
                         .setContentText(messageModel.getMessageBody());
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

@@ -25,7 +25,7 @@ public class GoogleHelpMapActivity extends BaseActivity {
         Double longitude = helpMessageModel.getLongitude();
         String message = helpMessageModel.getMessage();
 
-        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + latitude + "," + longitude + "(" + message + ")");
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
 

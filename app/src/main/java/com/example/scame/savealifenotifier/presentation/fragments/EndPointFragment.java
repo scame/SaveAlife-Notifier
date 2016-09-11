@@ -50,7 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EndPointFragment extends BaseFragment implements OnMapReadyCallback,
+public class EndPointFragment  extends BaseFragment implements OnMapReadyCallback,
                                             IEndPointPresenter.EndPointView {
 
     private static final int CIRCLE_RADIUS = 250;
@@ -92,7 +92,7 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
         try {
             fragmentView = inflater.inflate(R.layout.end_point_fragment, container, false);
         } catch (InflateException e) {
-            /* map is already there, just return view as it is */
+            //* map is already there, just return view as it is *//
         }
 
         ButterKnife.bind(this, fragmentView);

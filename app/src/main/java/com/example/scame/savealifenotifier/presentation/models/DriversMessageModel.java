@@ -3,7 +3,7 @@ package com.example.scame.savealifenotifier.presentation.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.scame.savealifenotifier.data.entities.LatLongPair;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +13,13 @@ public class DriversMessageModel implements Parcelable {
 
     private String messageBody;
 
-    private List<LatLongPair> path;
+    private List<LatLng> path;
 
     public DriversMessageModel() {
         path = new ArrayList<>();
     }
 
-    public void setPath(List<LatLongPair> path) {
+    public void setPath(List<LatLng> path) {
         this.path = path;
     }
 
@@ -31,23 +31,10 @@ public class DriversMessageModel implements Parcelable {
         return messageBody;
     }
 
-    public List<LatLongPair> getPath() {
+    public List<LatLng> getPath() {
         return path;
     }
 
-    protected DriversMessageModel(Parcel in) { }
-
-    public static final Creator<DriversMessageModel> CREATOR = new Creator<DriversMessageModel>() {
-        @Override
-        public DriversMessageModel createFromParcel(Parcel in) {
-            return new DriversMessageModel(in);
-        }
-
-        @Override
-        public DriversMessageModel[] newArray(int size) {
-            return new DriversMessageModel[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -56,5 +43,24 @@ public class DriversMessageModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.messageBody);
+        dest.writeTypedList(this.path);
     }
+
+    protected DriversMessageModel(Parcel in) {
+        this.messageBody = in.readString();
+        this.path = in.createTypedArrayList(LatLng.CREATOR);
+    }
+
+    public static final Parcelable.Creator<DriversMessageModel> CREATOR = new Parcelable.Creator<DriversMessageModel>() {
+        @Override
+        public DriversMessageModel createFromParcel(Parcel source) {
+            return new DriversMessageModel(source);
+        }
+
+        @Override
+        public DriversMessageModel[] newArray(int size) {
+            return new DriversMessageModel[size];
+        }
+    };
 }
