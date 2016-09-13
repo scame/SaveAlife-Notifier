@@ -13,6 +13,8 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -62,6 +64,8 @@ dependencies {
     compile 'hanks.xyz:htextview-library:0.1.5'
     compile 'com.github.jorgecastilloprz:fillableloaders:1.03@aar'
     compile 'pl.bclogic:pulsator4droid:1.0.2'
+
+    compile 'com.android.support:multidex:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -12,8 +12,11 @@ import android.util.Log;
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.data.mappers.DriverMessageMapper;
 import com.example.scame.savealifenotifier.data.mappers.HelpMessageMapper;
+import com.example.scame.savealifenotifier.data.repository.IUserDataManager;
+import com.example.scame.savealifenotifier.data.repository.UserDataManagerImp;
 import com.example.scame.savealifenotifier.presentation.activities.DriversHelpMapActivity;
 import com.example.scame.savealifenotifier.presentation.activities.GoogleHelpMapActivity;
+import com.example.scame.savealifenotifier.presentation.fragments.EndPointFragment;
 import com.example.scame.savealifenotifier.presentation.models.DriversMessageModel;
 import com.example.scame.savealifenotifier.presentation.models.HelpMessageModel;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -26,6 +29,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final int COMMON_MSG_ID = 1;
     private static final int DRIVERS_MSG_ID = 2;
 
+    private IUserDataManager userDataManager;
+
+    public MyFirebaseMessagingService() {
+        userDataManager = new UserDataManagerImp();
+    }
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -34,14 +43,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-
             // path key's available only in driver's type messages
             if (remoteMessage.getData().keySet().contains("path")) {
-                DriverMessageMapper driverMessageMapper = new DriverMessageMapper();
-                DriversMessageModel driversMessageModel  = driverMessageMapper.convert(remoteMessage.getData());
+                // check if driver isn't ambulance driver
+                if (!ambulanceModeEnabled()) {
+                    DriverMessageMapper driverMessageMapper = new DriverMessageMapper();
+                    DriversMessageModel driversMessageModel = driverMessageMapper.convert(remoteMessage.getData());
 
-                sendDriversNotification(driversMessageModel);
+                    sendDriversNotification(driversMessageModel);
+                }
             } else {
+                // if there's no path key then it's a help message
                 HelpMessageMapper helpMessageMapper = new HelpMessageMapper();
                 HelpMessageModel helpMessageModel = helpMessageMapper.convert(remoteMessage.getData());
 
@@ -55,6 +67,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
+    private boolean ambulanceModeEnabled() {
+        return userDataManager.getUserMode() == EndPointFragment.AMBULANCE_MODE;
+    }
 
     private void sendCommonNotification(HelpMessageModel helpMessage) {
 

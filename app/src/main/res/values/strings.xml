@@ -20,4 +20,8 @@
     <string name="destination_key">destination</string>
     <string name="path_key">pathKey</string>
 
+    <string name="current_mode">currentMode</string>
+    <string name="ambulance_mode">ambulance</string>
+    <string name="driver_mode">driver</string>
+
 </resources>

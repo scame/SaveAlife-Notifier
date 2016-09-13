@@ -8,8 +8,10 @@ import com.example.scame.savealifenotifier.data.repository.IFirebaseTokenManager
 import com.example.scame.savealifenotifier.data.repository.IGeocodingDataManager;
 import com.example.scame.savealifenotifier.data.repository.ILocationDataManager;
 import com.example.scame.savealifenotifier.data.repository.IMessagesDataManager;
+import com.example.scame.savealifenotifier.data.repository.IUserDataManager;
 import com.example.scame.savealifenotifier.data.repository.LocationDataManagerImp;
 import com.example.scame.savealifenotifier.data.repository.MessagesDataManagerImp;
+import com.example.scame.savealifenotifier.data.repository.UserDataManagerImp;
 import com.example.scame.savealifenotifier.domain.schedulers.ObserveOn;
 import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
 
@@ -74,5 +76,11 @@ public class DataModule {
     @Provides
     IFirebaseTokenManager provideFirebaseTokenMnager() {
         return new FirebaseTokenManagerImp();
+    }
+
+    @Singleton
+    @Provides
+    IUserDataManager provideUserDataManager() {
+        return new UserDataManagerImp();
     }
 }

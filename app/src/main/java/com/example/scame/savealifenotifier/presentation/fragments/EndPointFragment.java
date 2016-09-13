@@ -53,6 +53,9 @@ import butterknife.OnClick;
 public class EndPointFragment  extends BaseFragment implements OnMapReadyCallback,
                                             IEndPointPresenter.EndPointView {
 
+    public static final int DRIVER_MODE = 0;
+    public static final int AMBULANCE_MODE = 1;
+
     private static final int CIRCLE_RADIUS = 250;
 
     private static View fragmentView;

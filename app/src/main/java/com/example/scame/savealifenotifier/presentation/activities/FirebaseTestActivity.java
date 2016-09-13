@@ -1,6 +1,5 @@
 package com.example.scame.savealifenotifier.presentation.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,7 +21,7 @@ public class FirebaseTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.firebase_test_layout);
 
-        startActivity(new Intent(this, PageActivity.class));
+        //startActivity(new Intent(this, PageActivity.class));
 
         ButterKnife.bind(this);
 
@@ -44,6 +43,7 @@ public class FirebaseTestActivity extends AppCompatActivity {
     @OnClick(R.id.log_token_btn)
     public void onLogTokenClick() {
         String token = FirebaseInstanceId.getInstance().getToken();
+
 
         Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
         Log.i(TAG, token);

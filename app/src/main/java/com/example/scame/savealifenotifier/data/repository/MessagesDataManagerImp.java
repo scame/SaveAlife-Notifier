@@ -14,6 +14,7 @@ import com.example.scame.savealifenotifier.data.entities.LatLongPair;
 import com.example.scame.savealifenotifier.data.entities.LocationMessageEntity;
 import com.example.scame.savealifenotifier.data.entities.StatusEntity;
 import com.example.scame.savealifenotifier.data.entities.TokenUpdateEntity;
+import com.example.scame.savealifenotifier.presentation.fragments.EndPointFragment;
 
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
@@ -29,10 +30,13 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
 
     private IFirebaseTokenManager tokenManager;
 
+    private IUserDataManager userDataManager;
+
     public MessagesDataManagerImp() {
         retrofit = SaveAlifeApp.getAppComponent().getRetrofit();
         serverApi = retrofit.create(ServerApi.class);
         tokenManager = new FirebaseTokenManagerImp();
+        userDataManager = new UserDataManagerImp();
 
         context = SaveAlifeApp.getAppComponent().getApp();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -41,10 +45,12 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
     @Override
     public Observable<ResponseBody> sendLocationMessage() {
         LatLongPair latLong = getCurrentLatLong();
+        String currentRole = getCurrentMode();
 
         LocationMessageEntity locationEntity = new LocationMessageEntity();
 
-        locationEntity.setRole("driver");
+
+        locationEntity.setRole(currentRole);
         locationEntity.setCurrentToken(tokenManager.getActiveToken());
         locationEntity.setCurrentLat(latLong.getLatitude());
         locationEntity.setCurrentLon(latLong.getLongitude());
@@ -71,6 +77,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
     @Override
     public Observable<ResponseBody> sendDestinationMessage(LatLongPair destination) {
         LatLongPair currentLatLong = getCurrentLatLong();
+        String currentRole = getCurrentMode();
 
         DestinationEntity destinationEntity = new DestinationEntity();
 
@@ -79,7 +86,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         destinationEntity.setDestinationLat(destination.getLatitude());
         destinationEntity.setDestinationLon(destination.getLongitude());
         destinationEntity.setCurrentToken(tokenManager.getActiveToken());
-        destinationEntity.setRole("driver");
+        destinationEntity.setRole(currentRole);
 
         return serverApi.sendDestination(destinationEntity);
     }
@@ -99,7 +106,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
     public Observable<ResponseBody> sendChangeStatusRequest(String status) {
         StatusEntity statusEntity = new StatusEntity();
         statusEntity.setCurrentToken(tokenManager.getActiveToken());
-        statusEntity.setRole("person");
+        statusEntity.setRole(status);
 
         return serverApi.changeStatus(statusEntity);
     }
@@ -109,5 +116,18 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         double longitude = Double.valueOf(sharedPrefs.getString(context.getString(R.string.current_longitude), ""));
 
         return new LatLongPair(latitude, longitude);
+    }
+
+    private String getCurrentMode() {
+        int currentMode = userDataManager.getUserMode();
+
+        switch (currentMode) {
+            case EndPointFragment.DRIVER_MODE:
+                return context.getString(R.string.driver_mode);
+            case EndPointFragment.AMBULANCE_MODE:
+                return context.getString(R.string.ambulance_mode);
+            default:
+                return context.getString(R.string.driver_mode);
+        }
     }
 }

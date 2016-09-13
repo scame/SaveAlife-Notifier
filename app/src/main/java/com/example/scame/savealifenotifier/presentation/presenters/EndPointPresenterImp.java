@@ -8,6 +8,7 @@ import com.example.scame.savealifenotifier.domain.usecases.DefaultSubscriber;
 import com.example.scame.savealifenotifier.domain.usecases.LocationUpdatesUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.ReverseGeocodeUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.SetupDestinationUseCase;
+import com.example.scame.savealifenotifier.domain.usecases.SetupUserModeUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.StopDrivingModeUseCase;
 import com.example.scame.savealifenotifier.presentation.models.AddressModel;
 import com.example.scame.savealifenotifier.presentation.models.DirectionModel;
@@ -29,19 +30,23 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
 
     private StopDrivingModeUseCase drivingModeUseCase;
 
+    private SetupUserModeUseCase userModeUseCase;
+
     private T view;
 
     public EndPointPresenterImp(ReverseGeocodeUseCase reverseGeocodeUseCase,
                                 ComputeDirectionUseCase computeDirectionUseCase,
                                 LocationUpdatesUseCase locationUpdatesUseCase,
                                 SetupDestinationUseCase destinationUseCase,
-                                StopDrivingModeUseCase drivingModeUseCase) {
+                                StopDrivingModeUseCase drivingModeUseCase,
+                                SetupUserModeUseCase userModeUseCase) {
 
         this.reverseGeocodeUseCase = reverseGeocodeUseCase;
         this.computeDirectionUseCase = computeDirectionUseCase;
         this.locationUpdatesUseCase = locationUpdatesUseCase;
         this.destinationUseCase = destinationUseCase;
         this.drivingModeUseCase = drivingModeUseCase;
+        this.userModeUseCase = userModeUseCase;
     }
 
     @Override
@@ -71,8 +76,9 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
     }
 
     @Override
-    public void stopDrivingMode() {
-        drivingModeUseCase.execute(new DrivingModeSubscriber());
+    public void setupUserMode(int mode) {
+        userModeUseCase.setUserMode(mode);
+        userModeUseCase.execute(new DefaultSubscriber<>());
     }
 
     @Override

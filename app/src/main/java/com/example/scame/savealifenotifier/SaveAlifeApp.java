@@ -2,6 +2,7 @@ package com.example.scame.savealifenotifier;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.example.scame.savealifenotifier.data.di.DataModule;
 import com.example.scame.savealifenotifier.presentation.di.components.ApplicationComponent;
@@ -32,5 +33,12 @@ public class SaveAlifeApp extends Application {
 
     public static ApplicationComponent getAppComponent() {
         return appComponent;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+
+        MultiDex.install(this);
     }
 }

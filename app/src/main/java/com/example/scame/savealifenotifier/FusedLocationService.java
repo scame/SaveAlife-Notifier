@@ -73,7 +73,6 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
 
         if (currentLocation != null) {
             handleLocationUpdate(currentLocation.getLatitude(), currentLocation.getLongitude());
-            Log.i("DEBUG", "current location: " + currentLocation.toString());
         }
 
         startLocationUpdates();
@@ -89,7 +88,7 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
             messagesDataManager.sendLocationMessage()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
-                //    .subscribe(responseBody -> Log.i("onNextSend", "done"));
+                   // .subscribe();
         }
     }
 
