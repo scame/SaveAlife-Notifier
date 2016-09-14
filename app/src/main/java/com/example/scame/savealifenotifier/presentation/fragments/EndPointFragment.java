@@ -15,6 +15,8 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.dd.morphingbutton.MorphingButton;
 import com.dd.morphingbutton.impl.LinearProgressButton;
@@ -52,17 +54,25 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class EndPointFragment  extends BaseFragment implements OnMapReadyCallback,
-                                            IEndPointPresenter.EndPointView {
+                                            IEndPointPresenter.EndPointView,
+                                            RadioGroup.OnCheckedChangeListener{
 
     public static final int DRIVER_MODE = 0;
     public static final int AMBULANCE_MODE = 1;
 
     private static final int CIRCLE_RADIUS = 250;
 
+    private static final String MODE_STATE = "MODE";
+
     private static View fragmentView;
 
     @BindView(R.id.morph_btn) LinearProgressButton morphButton;
     @BindView(R.id.mapview) MapView mapView;
+
+    @BindView(R.id.rb_ambulance) RadioButton ambulanceMode;
+    @BindView(R.id.rb_driver) RadioButton driverMode;
+
+    @BindView(R.id.rg_mode) RadioGroup modeToggle;
 
     private boolean morphButtonClicked;
 
@@ -108,6 +118,9 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
 
         presenter.setView(this);
 
+        modeToggle.setOnCheckedChangeListener(this);
+
+        restoreRadioGroup(savedInstanceState);
         morphToReady(morphButton, 0);
 
         return fragmentView;
@@ -212,6 +225,8 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
             outState.putParcelable(getString(R.string.destination_key), destination);
         }
 
+        outState.putBoolean(MODE_STATE, ambulanceMode.isChecked());
+
         super.onSaveInstanceState(outState);
     }
 
@@ -277,6 +292,26 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
         }
     }
 
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+        switch (checkedId){
+            case R.id.rb_ambulance:
+                presenter.setupUserMode(AMBULANCE_MODE);
+                break;
+            case R.id.rb_driver:
+                presenter.setupUserMode(DRIVER_MODE);
+                break;
+        }
+    }
+
+    private void restoreRadioGroup(Bundle savedInstanceState){
+        if (savedInstanceState != null){
+            ambulanceMode.setChecked(savedInstanceState.getBoolean(MODE_STATE));
+            driverMode.setChecked(!savedInstanceState.getBoolean(MODE_STATE));
+        }
+    }
+
     private void morphToReady(final MorphingButton btnMorph, int duration) {
         MorphingButton.Params square = MorphingButton.Params.create()
                 .text(getString(R.string.mb_button))
@@ -285,7 +320,7 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
                 .width(dimen(R.dimen.mb_width_100))
                 .height(dimen(R.dimen.mb_height_56))
                 .color(color(R.color.colorAccent))
-                .colorPressed(color(R.color.colorAccent));
+                .colorPressed(color(R.color.colorButtonPressed));
 
         btnMorph.morph(square);
     }
@@ -298,7 +333,7 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
                 .width(dimen(R.dimen.mb_width_120))
                 .height(dimen(R.dimen.mb_height_56))
                 .color(color(R.color.colorAccent))
-                .colorPressed(color(R.color.colorAccent))
+                .colorPressed(color(R.color.colorButtonPressed))
                 .icon(R.drawable.ic_done);
 
         btnMorph.morph(circle);

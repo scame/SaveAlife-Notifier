@@ -16,10 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".presentation.activities.FirebaseTestActivity">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
+
         </activity>
 
         <activity android:name=".presentation.activities.PageActivity" >
@@ -29,7 +26,10 @@
         <activity android:name=".presentation.activities.GoogleHelpMapActivity" />
 
         <activity android:name=".presentation.activities.SplashScreenActivity">
-
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
         </activity>
 
         <service

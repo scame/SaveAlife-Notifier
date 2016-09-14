@@ -14,9 +14,18 @@
         app:pulse_count="4"
         app:pulse_duration="7000"
         app:pulse_repeat="0"
-        app:pulse_color="?android:colorAccent"
+        app:pulse_color="@color/colorPulsatorGreen"
         app:pulse_startFromScratch="false"
         android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/help_me_end_icon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/circle_green"
+            android:src="@drawable/help_ok"/>
 
     </pl.bclogic.pulsator4droid.library.PulsatorLayout>
 
@@ -31,6 +40,14 @@
         app:pulse_color="?android:colorPrimary"
         app:pulse_startFromScratch="false">
 
+        <ImageView
+            android:id="@+id/help_me_text"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/circle_red"
+            android:src="@drawable/help"/>
 
     </pl.bclogic.pulsator4droid.library.PulsatorLayout>
 </FrameLayout>

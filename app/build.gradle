@@ -66,6 +66,8 @@ dependencies {
     compile 'pl.bclogic:pulsator4droid:1.0.2'
 
     compile 'com.android.support:multidex:1.0.0'
+
+    compile 'info.hoang8f:android-segmented:1.0.6'
 }
 
 apply plugin: 'com.google.gms.google-services'

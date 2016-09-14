@@ -24,5 +24,7 @@
     <string name="ambulance_mode">ambulance</string>
     <string name="non_driver_mode">person</string>
     <string name="driver_mode">driver</string>
+    <string name="ambulance_rb">Ambulance</string>
+    <string name="driver_rb">Driver</string>
 
 </resources>
