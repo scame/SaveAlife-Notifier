@@ -2,6 +2,7 @@ package com.example.scame.savealifenotifier;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.support.multidex.MultiDex;
 
 import com.example.scame.savealifenotifier.data.di.DataModule;
@@ -22,6 +23,8 @@ public class SaveAlifeApp extends Application {
         super.onCreate();
 
         buildAppComponent();
+
+        startService(new Intent(this, FusedLocationService.class));
     }
 
     private void buildAppComponent() {

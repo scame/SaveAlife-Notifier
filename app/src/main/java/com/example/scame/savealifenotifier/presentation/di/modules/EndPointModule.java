@@ -8,11 +8,11 @@ import com.example.scame.savealifenotifier.data.repository.IUserDataManager;
 import com.example.scame.savealifenotifier.domain.schedulers.ObserveOn;
 import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
 import com.example.scame.savealifenotifier.domain.usecases.ComputeDirectionUseCase;
+import com.example.scame.savealifenotifier.domain.usecases.DeviceStatusUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.LocationUpdatesUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.ReverseGeocodeUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.SetupDestinationUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.SetupUserModeUseCase;
-import com.example.scame.savealifenotifier.domain.usecases.StopDrivingModeUseCase;
 import com.example.scame.savealifenotifier.presentation.di.PerActivity;
 import com.example.scame.savealifenotifier.presentation.presenters.EndPointPresenterImp;
 import com.example.scame.savealifenotifier.presentation.presenters.IEndPointPresenter;
@@ -31,11 +31,11 @@ public class EndPointModule {
                                                                    ComputeDirectionUseCase computeDirectionUseCase,
                                                                    LocationUpdatesUseCase locationUpdatesUseCase,
                                                                    SetupDestinationUseCase destinationUseCase,
-                                                                   StopDrivingModeUseCase drivingModeUseCase,
-                                                                   SetupUserModeUseCase userModeUseCase) {
+                                                                   SetupUserModeUseCase userModeUseCase,
+                                                                   DeviceStatusUseCase deviceStatusUseCase) {
 
         return new EndPointPresenterImp<>(reverseGeocodeUseCase, computeDirectionUseCase,
-                locationUpdatesUseCase, destinationUseCase, drivingModeUseCase, userModeUseCase);
+                locationUpdatesUseCase, destinationUseCase, userModeUseCase, deviceStatusUseCase);
     }
 
     @PerActivity
@@ -70,13 +70,6 @@ public class EndPointModule {
         return new SetupDestinationUseCase(subscribeOn, observeOn, messagesDataManager);
     }
 
-    @PerActivity
-    @Provides
-    StopDrivingModeUseCase provideStopDrivingModeUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                                                         IMessagesDataManager messagesDataManager) {
-
-        return new StopDrivingModeUseCase(subscribeOn, observeOn, messagesDataManager);
-    }
 
     @PerActivity
     @Provides
@@ -84,5 +77,13 @@ public class EndPointModule {
                                                 IUserDataManager userDataManager) {
 
         return new SetupUserModeUseCase(subscribeOn, observeOn, userDataManager);
+    }
+
+    @PerActivity
+    @Provides
+    DeviceStatusUseCase provideDeviceStatusUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
+                                                   IMessagesDataManager dataManager) {
+
+        return new DeviceStatusUseCase(subscribeOn, observeOn, dataManager);
     }
 }

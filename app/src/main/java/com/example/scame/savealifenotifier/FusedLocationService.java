@@ -28,6 +28,8 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
+    public static boolean SEND_LOCATION_TO_SERVER;
+
     private GoogleApiClient googleApiClient;
 
     private long UPDATE_INTERVAL = 20 * 1000;
@@ -84,11 +86,11 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
         locationDataManager.saveCurrentLocation(latLongPair);
 
         // send only if token is already generated
-        if (!tokenManager.getActiveToken().equals("")) {
+        if (!tokenManager.getActiveToken().equals("") && SEND_LOCATION_TO_SERVER) {
             messagesDataManager.sendLocationMessage()
                     .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
-                   // .subscribe();
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(responseBody -> Log.i("onxCompleted", "location request"));
         }
     }
 

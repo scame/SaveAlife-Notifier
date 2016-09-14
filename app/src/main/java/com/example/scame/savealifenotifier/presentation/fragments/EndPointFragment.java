@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.dd.morphingbutton.MorphingButton;
 import com.dd.morphingbutton.impl.LinearProgressButton;
+import com.example.scame.savealifenotifier.FusedLocationService;
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
 import com.example.scame.savealifenotifier.presentation.activities.PageActivity;
@@ -268,7 +269,10 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
         if (morphButtonClicked) {
             showConfirmDialog();
         } else {
-            // TODO: implement success button logic
+            FusedLocationService.SEND_LOCATION_TO_SERVER = false;
+            // this is required by server, so it knows that there's no point in sending
+            // messages that ask to change a route
+            presenter.changeDeviceStatus(getString(R.string.non_driver_mode));
             morphToReady(morphButton, integer(R.integer.mb_animation));
         }
     }
@@ -327,7 +331,10 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
                 .setDescription(description)
                 .setPositive(getString(R.string.dialog_positive), (dialog, which) -> {
                     simulateProgress(morphButton);
+                    // send current/destination coordinates & with driver/ambulance status
                     presenter.setupDestination(new LatLongPair(destination.latitude, destination.longitude));
+                    // and start sending ongoing location updates
+                    FusedLocationService.SEND_LOCATION_TO_SERVER = true;
                 })
                 .setNegative(getString(R.string.dialog_negative), (dialog, which) -> {
                     morphButtonClicked = !morphButtonClicked;

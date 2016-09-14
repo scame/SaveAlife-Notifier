@@ -11,8 +11,6 @@ import android.support.annotation.Nullable;
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.SaveAlifeApp;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
-import com.example.scame.savealifenotifier.domain.schedulers.ObserveOn;
-import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -37,16 +35,8 @@ public class LocationDataManagerImp implements ILocationDataManager, GoogleApiCl
 
     private Subscription subscription;
 
-    private ObserveOn observeOn;
-    private SubscribeOn subscribeOn;
-
     private long UPDATE_INTERVAL = 10 * 1000;
     private long FASTEST_INTERVAL = 2000;
-
-    public LocationDataManagerImp(ObserveOn observeOn, SubscribeOn subscribeOn) {
-        this.observeOn = observeOn;
-        this.subscribeOn = subscribeOn;
-    }
 
     @SuppressWarnings({"MissingPermission"})
     public Observable<LatLongPair> startLocationUpdates() {

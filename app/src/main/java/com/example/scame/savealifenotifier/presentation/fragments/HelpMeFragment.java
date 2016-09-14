@@ -1,6 +1,5 @@
 package com.example.scame.savealifenotifier.presentation.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.scame.savealifenotifier.FusedLocationService;
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.presentation.activities.PageActivity;
 import com.example.scame.savealifenotifier.presentation.presenters.IHelpMePresenter;
@@ -31,14 +29,6 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
     @BindView(R.id.help_me_end_btn) PulsatorLayout pulsatorGreen;
     @BindView(R.id.help_me_start_btn) PulsatorLayout pulsatorRed;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (!isMyServiceRunning(FusedLocationService.class)) {
-            getActivity().startService(new Intent(getContext(), FusedLocationService.class));
-        }
-    }
 
     @Nullable
     @Override

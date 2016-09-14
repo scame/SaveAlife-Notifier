@@ -5,11 +5,11 @@ import android.util.Log;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
 import com.example.scame.savealifenotifier.domain.usecases.ComputeDirectionUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.DefaultSubscriber;
+import com.example.scame.savealifenotifier.domain.usecases.DeviceStatusUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.LocationUpdatesUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.ReverseGeocodeUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.SetupDestinationUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.SetupUserModeUseCase;
-import com.example.scame.savealifenotifier.domain.usecases.StopDrivingModeUseCase;
 import com.example.scame.savealifenotifier.presentation.models.AddressModel;
 import com.example.scame.savealifenotifier.presentation.models.DirectionModel;
 
@@ -28,9 +28,9 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
 
     private SetupDestinationUseCase destinationUseCase;
 
-    private StopDrivingModeUseCase drivingModeUseCase;
-
     private SetupUserModeUseCase userModeUseCase;
+
+    private DeviceStatusUseCase deviceStatusUseCase;
 
     private T view;
 
@@ -38,15 +38,15 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
                                 ComputeDirectionUseCase computeDirectionUseCase,
                                 LocationUpdatesUseCase locationUpdatesUseCase,
                                 SetupDestinationUseCase destinationUseCase,
-                                StopDrivingModeUseCase drivingModeUseCase,
-                                SetupUserModeUseCase userModeUseCase) {
+                                SetupUserModeUseCase userModeUseCase,
+                                DeviceStatusUseCase deviceStatusUseCase) {
 
         this.reverseGeocodeUseCase = reverseGeocodeUseCase;
         this.computeDirectionUseCase = computeDirectionUseCase;
         this.locationUpdatesUseCase = locationUpdatesUseCase;
         this.destinationUseCase = destinationUseCase;
-        this.drivingModeUseCase = drivingModeUseCase;
         this.userModeUseCase = userModeUseCase;
+        this.deviceStatusUseCase = deviceStatusUseCase;
     }
 
     @Override
@@ -65,7 +65,6 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
 
     @Override
     public void startLocationUpdates() {
-        Log.i("onxLocationUpdates", "started");
         locationUpdatesUseCase.execute(new LocationUpdatesSubscriber());
     }
 
@@ -79,6 +78,12 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
     public void setupUserMode(int mode) {
         userModeUseCase.setUserMode(mode);
         userModeUseCase.execute(new DefaultSubscriber<>());
+    }
+
+    @Override
+    public void changeDeviceStatus(String status) {
+        deviceStatusUseCase.setDeviceStatus(status);
+        deviceStatusUseCase.execute(new DefaultSubscriber<>());
     }
 
     @Override

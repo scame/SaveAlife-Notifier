@@ -1,5 +1,6 @@
 package com.example.scame.savealifenotifier.domain.usecases;
 
+
 import com.example.scame.savealifenotifier.data.repository.IMessagesDataManager;
 import com.example.scame.savealifenotifier.domain.schedulers.ObserveOn;
 import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
@@ -7,21 +8,24 @@ import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
 import okhttp3.ResponseBody;
 import rx.Observable;
 
-public class StopDrivingModeUseCase extends UseCase<ResponseBody> {
+public class DeviceStatusUseCase extends UseCase<ResponseBody> {
 
-    private static final String STATUS = "person";
+    private IMessagesDataManager dataManager;
 
-    private IMessagesDataManager messagesDataManager;
+    private String deviceStatus;
 
-    public StopDrivingModeUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                                  IMessagesDataManager messagesDataManager) {
-
+    public DeviceStatusUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, IMessagesDataManager dataManager) {
         super(subscribeOn, observeOn);
-        this.messagesDataManager = messagesDataManager;
+
+        this.dataManager = dataManager;
     }
 
     @Override
     protected Observable<ResponseBody> getUseCaseObservable() {
-        return messagesDataManager.sendChangeStatusRequest(STATUS);
+        return dataManager.sendChangeStatusRequest(deviceStatus);
+    }
+
+    public void setDeviceStatus(String deviceStatus) {
+        this.deviceStatus = deviceStatus;
     }
 }

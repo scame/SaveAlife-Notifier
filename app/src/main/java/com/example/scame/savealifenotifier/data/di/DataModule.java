@@ -12,8 +12,6 @@ import com.example.scame.savealifenotifier.data.repository.IUserDataManager;
 import com.example.scame.savealifenotifier.data.repository.LocationDataManagerImp;
 import com.example.scame.savealifenotifier.data.repository.MessagesDataManagerImp;
 import com.example.scame.savealifenotifier.data.repository.UserDataManagerImp;
-import com.example.scame.savealifenotifier.domain.schedulers.ObserveOn;
-import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
 
 import java.util.concurrent.TimeUnit;
 
@@ -68,8 +66,8 @@ public class DataModule {
 
     @Singleton
     @Provides
-    ILocationDataManager provideLocationDataManager(SubscribeOn subscribeOn, ObserveOn observeOn) {
-        return new LocationDataManagerImp(observeOn, subscribeOn);
+    ILocationDataManager provideLocationDataManager() {
+        return new LocationDataManagerImp();
     }
 
     @Singleton

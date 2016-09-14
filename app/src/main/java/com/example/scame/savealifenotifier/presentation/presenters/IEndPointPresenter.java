@@ -23,4 +23,6 @@ public interface IEndPointPresenter<T> extends Presenter<T> {
     void setupDestination(LatLongPair latLongPair);
 
     void setupUserMode(int mode);
+
+    void changeDeviceStatus(String status);
 }
