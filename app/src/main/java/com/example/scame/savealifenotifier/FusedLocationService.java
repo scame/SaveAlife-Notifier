@@ -2,9 +2,11 @@ package com.example.scame.savealifenotifier;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -53,6 +55,9 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
+        SEND_LOCATION_TO_SERVER = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(getString(R.string.isLocationUpdatesActive), false);
     }
 
     @Override
@@ -128,8 +133,16 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
             googleApiClient.disconnect();
         }
+
+        cacheUpdatesVariable();
     }
 
+    private void cacheUpdatesVariable() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.edit()
+                .putBoolean(getString(R.string.isLocationUpdatesActive), SEND_LOCATION_TO_SERVER)
+                .apply();
+    }
 
     @Nullable
     @Override

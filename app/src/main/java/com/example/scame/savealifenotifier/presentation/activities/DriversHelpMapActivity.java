@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.presentation.di.components.ApplicationComponent;
 import com.example.scame.savealifenotifier.presentation.models.DriversMessageModel;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -49,6 +50,7 @@ public class DriversHelpMapActivity extends BaseActivity implements OnMapReadyCa
 
         if (latLngList != null) {
             googleMap.addPolyline(new PolylineOptions().addAll(latLngList));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngList.get(0), 9));
         }
     }
 

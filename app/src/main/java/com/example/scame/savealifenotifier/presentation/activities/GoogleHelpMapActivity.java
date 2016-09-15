@@ -34,6 +34,8 @@ public class GoogleHelpMapActivity extends BaseActivity {
         }
     }
 
+
+
     @Override
     protected void inject(ApplicationComponent component) {
 

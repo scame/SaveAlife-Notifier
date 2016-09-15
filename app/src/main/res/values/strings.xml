@@ -27,4 +27,6 @@
     <string name="ambulance_rb">Ambulance</string>
     <string name="driver_rb">Driver</string>
 
+    <string name="isLocationUpdatesActive">locationUpdates</string>
+
 </resources>

@@ -366,7 +366,7 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
                 .setDescription(description)
                 .setPositive(getString(R.string.dialog_positive), (dialog, which) -> {
                     simulateProgress(morphButton);
-                    // send current/destination coordinates & with driver/ambulance status
+                    // send current/destination coordinates & driver/ambulance status
                     presenter.setupDestination(new LatLongPair(destination.latitude, destination.longitude));
                     // and start sending ongoing location updates
                     FusedLocationService.SEND_LOCATION_TO_SERVER = true;
