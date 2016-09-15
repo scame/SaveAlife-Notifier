@@ -2,7 +2,6 @@ package com.example.scame.savealifenotifier.presentation.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,13 +60,11 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
 
     @OnClick(R.id.help_me_start_btn)
     public void onHelpMeClickStart() {
-        Log.i("onxHelpMeStart", "true");
         showMaterialDialog();
     }
 
     @OnClick(R.id.help_me_end_btn)
     public void onHelpMeClickEnd() {
-        Log.i("onxHelpMeEnd", "true");
         showMaterialDialog();
     }
 

@@ -134,34 +134,6 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
         }
     }
 
-    private final class DrivingModeSubscriber extends DefaultSubscriber<ResponseBody> {
-
-        @Override
-        public void onCompleted() {
-            super.onCompleted();
-
-            Log.i("onCompleted", "completed");
-        }
-
-        @Override
-        public void onNext(ResponseBody responseBody) {
-            super.onNext(responseBody);
-
-            try {
-                Log.i("onNext", responseBody.string());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            super.onError(e);
-
-            Log.i("onError", e.getLocalizedMessage());
-        }
-    }
-
     private final class ReverseGeocodeSubscriber extends DefaultSubscriber<AddressModel> {
 
         @Override

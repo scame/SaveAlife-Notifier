@@ -203,6 +203,8 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
                 destinationMarker = googleMap.addMarker(new MarkerOptions().position(destination));
                 this.destination = destination;
             }
+        } else if (currentPosition != null) {
+            updateCurrentLocation(new LatLongPair(currentPosition.latitude, currentPosition.longitude));
         }
     }
 
@@ -232,6 +234,9 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
 
     @Override
     public void updateCurrentLocation(LatLongPair latLongPair) {
+
+        currentPosition = new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude());
+
         if (googleMap != null) {
 
             if (currentPositionMarker != null) {
