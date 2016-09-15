@@ -12,6 +12,7 @@ import com.example.scame.savealifenotifier.data.entities.DestinationEntity;
 import com.example.scame.savealifenotifier.data.entities.HelpMessageEntity;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
 import com.example.scame.savealifenotifier.data.entities.LocationMessageEntity;
+import com.example.scame.savealifenotifier.data.entities.RegistrationEntity;
 import com.example.scame.savealifenotifier.data.entities.StatusEntity;
 import com.example.scame.savealifenotifier.data.entities.TokenUpdateEntity;
 import com.example.scame.savealifenotifier.presentation.fragments.EndPointFragment;
@@ -40,6 +41,15 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
 
         context = SaveAlifeApp.getAppComponent().getApp();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Override
+    public Observable<ResponseBody> sendRegistrationRequest() {
+        RegistrationEntity registrationEntity = new RegistrationEntity();
+        registrationEntity.setCurrentToken(tokenManager.getActiveToken());
+        registrationEntity.setRole("person");
+
+        return serverApi.sendRegistrationRequest(registrationEntity);
     }
 
     @Override

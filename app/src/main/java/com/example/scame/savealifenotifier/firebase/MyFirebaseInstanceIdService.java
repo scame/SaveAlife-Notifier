@@ -32,7 +32,13 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
         cacheToken(refreshedToken);
 
         if (!tokenManager.getOldToken().equals("")) {
-            messagesDataManager.sendUpdateTokenRequest();
+            messagesDataManager
+                    .sendUpdateTokenRequest()
+                    .subscribe(responseBody -> Log.i("onxTokenUpdate", "updated"));
+        } else {
+            messagesDataManager
+                    .sendRegistrationRequest()
+                    .subscribe(responseBody -> Log.i("onxTokenSending", "sent"));
         }
     }
 

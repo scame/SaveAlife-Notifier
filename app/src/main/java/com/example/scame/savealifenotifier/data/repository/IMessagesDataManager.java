@@ -17,4 +17,6 @@ public interface IMessagesDataManager {
     Observable<ResponseBody> sendUpdateTokenRequest();
 
     Observable<ResponseBody> sendChangeStatusRequest(String status);
+
+    Observable<ResponseBody> sendRegistrationRequest();
 }
