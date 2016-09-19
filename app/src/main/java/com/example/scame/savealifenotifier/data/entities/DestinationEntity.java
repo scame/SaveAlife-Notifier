@@ -5,8 +5,6 @@ public class DestinationEntity {
 
     private String currentToken;
 
-    private String role;
-
     private Double currentLat;
 
     private Double currentLon;
@@ -17,10 +15,6 @@ public class DestinationEntity {
 
     public void setCurrentToken(String currentToken) {
         this.currentToken = currentToken;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public void setCurrentLat(double currentLat) {
@@ -41,10 +35,6 @@ public class DestinationEntity {
 
     public String getCurrentToken() {
         return currentToken;
-    }
-
-    public String getRole() {
-        return role;
     }
 
     public double getCurrentLat() {

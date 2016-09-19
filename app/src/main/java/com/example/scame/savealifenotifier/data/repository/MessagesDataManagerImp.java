@@ -47,25 +47,22 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
     public Observable<ResponseBody> sendRegistrationRequest() {
         RegistrationEntity registrationEntity = new RegistrationEntity();
         registrationEntity.setCurrentToken(tokenManager.getActiveToken());
-        registrationEntity.setRole("person");
 
-        return serverApi.sendRegistrationRequest(registrationEntity);
+        return serverApi.sendRegistrationRequest(registrationEntity, "person");
     }
 
     @Override
     public Observable<ResponseBody> sendLocationMessage() {
         LatLongPair latLong = getCurrentLatLong();
-        String currentRole = getCurrentMode();
 
         LocationMessageEntity locationEntity = new LocationMessageEntity();
 
 
-        locationEntity.setRole(currentRole);
         locationEntity.setCurrentToken(tokenManager.getActiveToken());
         locationEntity.setCurrentLat(latLong.getLatitude());
         locationEntity.setCurrentLon(latLong.getLongitude());
 
-        return serverApi.sendLocationToServer(locationEntity);
+        return serverApi.sendLocationToServer(locationEntity, getCurrentMode());
     }
 
     @Override
@@ -75,19 +72,17 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         HelpMessageEntity helpMessageEntity = new HelpMessageEntity();
 
         helpMessageEntity.setCurrentToken(tokenManager.getActiveToken());
-        helpMessageEntity.setRole("person");
         helpMessageEntity.setCurrentLon(latLong.getLongitude());
         helpMessageEntity.setCurrentLat(latLong.getLatitude());
         helpMessageEntity.setMessage(helpMessage);
 
-        return serverApi.sendHelpMessage(helpMessageEntity);
+        return serverApi.sendHelpMessage(helpMessageEntity, "person");
     }
 
 
     @Override
     public Observable<ResponseBody> sendDestinationMessage(LatLongPair destination) {
         LatLongPair currentLatLong = getCurrentLatLong();
-        String currentRole = getCurrentMode();
 
         DestinationEntity destinationEntity = new DestinationEntity();
 
@@ -96,9 +91,8 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         destinationEntity.setDestinationLat(destination.getLatitude());
         destinationEntity.setDestinationLon(destination.getLongitude());
         destinationEntity.setCurrentToken(tokenManager.getActiveToken());
-        destinationEntity.setRole(currentRole);
 
-        return serverApi.sendDestination(destinationEntity);
+        return serverApi.sendDestination(destinationEntity, getCurrentMode());
     }
 
 
@@ -116,9 +110,8 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
     public Observable<ResponseBody> sendChangeStatusRequest(String status) {
         StatusEntity statusEntity = new StatusEntity();
         statusEntity.setCurrentToken(tokenManager.getActiveToken());
-        statusEntity.setRole(status);
 
-        return serverApi.changeStatus(statusEntity);
+        return serverApi.changeStatus(statusEntity, status);
     }
 
     private LatLongPair getCurrentLatLong() {

@@ -11,25 +11,31 @@ import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface ServerApi {
 
-    @PUT("http://10.0.1.6:8081/rest/user")
+    @PUT("http://10.0.1.6:8080/rest/user")
     Observable<ResponseBody> tokenUpdateRequest(@Body TokenUpdateEntity tokenEntity);
 
-    @POST("http://10.0.1.6:8081/rest/send/")
-    Observable<ResponseBody> sendLocationToServer(@Body LocationMessageEntity locationEntity);
+    @POST("http://10.0.1.6:8080/rest/user")
+    Observable<ResponseBody> sendLocationToServer(@Body LocationMessageEntity locationEntity,
+                                                  @Query("role") String role);
 
-    @POST("http://10.0.1.6:8081/rest/send/")
-    Observable<ResponseBody> sendHelpMessage(@Body HelpMessageEntity helpEntity);
+    @POST("http://10.0.1.6:8080/rest/user")
+    Observable<ResponseBody> sendHelpMessage(@Body HelpMessageEntity helpEntity,
+                                             @Query("role") String role);
 
-    @PUT("http://10.0.1.6:8081/rest/user")
-    Observable<ResponseBody> changeStatus(@Body StatusEntity statusEntity);
+    @PUT("http://10.0.1.6:8080/rest/user")
+    Observable<ResponseBody> changeStatus(@Body StatusEntity statusEntity,
+                                          @Query("role") String role);
 
-    @POST("http://10.0.1.6:8081/rest/send/")
-    Observable<ResponseBody> sendDestination(@Body DestinationEntity destinationEntity);
+    @POST("http://10.0.1.6:8080/rest/user")
+    Observable<ResponseBody> sendDestination(@Body DestinationEntity destinationEntity,
+                                             @Query("role") String role);
 
-    @POST("http://10.0.1.6:8081/rest/user/")
-    Observable<ResponseBody> sendRegistrationRequest(@Body RegistrationEntity registrationEntity);
+    @POST("http://10.0.1.6:8080/rest/user")
+    Observable<ResponseBody> sendRegistrationRequest(@Body RegistrationEntity registrationEntity,
+                                                   @Query("role") String role);
 }

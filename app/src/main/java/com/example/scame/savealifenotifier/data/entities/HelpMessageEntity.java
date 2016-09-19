@@ -5,8 +5,6 @@ public class HelpMessageEntity {
 
     private String currentToken;
 
-    private String role;
-
     private double currentLat;
 
     private double currentLon;
@@ -15,10 +13,6 @@ public class HelpMessageEntity {
 
     public void setCurrentToken(String currentToken) {
         this.currentToken = currentToken;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public void setCurrentLat(double currentLat) {
@@ -35,10 +29,6 @@ public class HelpMessageEntity {
 
     public String getCurrentToken() {
         return currentToken;
-    }
-
-    public String getRole() {
-        return role;
     }
 
     public double getCurrentLat() {

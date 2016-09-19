@@ -10,6 +10,11 @@ import com.example.scame.savealifenotifier.data.repository.MessagesDataManagerIm
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import okhttp3.ResponseBody;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
     private static final String TAG = "logTokenRefresh";
@@ -34,11 +39,30 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
         if (!tokenManager.getOldToken().equals("")) {
             messagesDataManager
                     .sendUpdateTokenRequest()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(responseBody -> Log.i("onxTokenUpdate", "updated"));
         } else {
             messagesDataManager
                     .sendRegistrationRequest()
-                    .subscribe(responseBody -> Log.i("onxTokenSending", "sent"));
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<ResponseBody>() {
+                        @Override
+                        public void onCompleted() {
+                            Log.i("onxCompleted", "true");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.i("onxError", e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onNext(ResponseBody responseBody) {
+                            Log.i("onxNext", "next");
+                        }
+                    });
         }
     }
 
