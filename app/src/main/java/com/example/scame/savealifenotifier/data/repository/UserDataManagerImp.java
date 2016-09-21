@@ -26,6 +26,6 @@ public class UserDataManagerImp implements IUserDataManager {
 
     @Override
     public int getUserMode() {
-        return sharedPrefs.getInt(context.getString(R.string.current_mode), EndPointFragment.DRIVER_MODE); // driver mode is default
+        return sharedPrefs.getInt(context.getString(R.string.current_mode), EndPointFragment.NON_DRIVER_MODE); // non-driver mode is default
     }
 }

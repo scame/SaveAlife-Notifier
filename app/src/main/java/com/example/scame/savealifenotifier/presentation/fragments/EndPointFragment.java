@@ -53,12 +53,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EndPointFragment  extends BaseFragment implements OnMapReadyCallback,
-                                            IEndPointPresenter.EndPointView,
-                                            RadioGroup.OnCheckedChangeListener{
+public class EndPointFragment  extends BaseFragment implements OnMapReadyCallback, IEndPointPresenter.EndPointView {
 
     public static final int DRIVER_MODE = 0;
     public static final int AMBULANCE_MODE = 1;
+    public static final int NON_DRIVER_MODE = 2;
 
     private static final int CIRCLE_RADIUS = 250;
 
@@ -118,8 +117,6 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
 
         presenter.setView(this);
 
-        modeToggle.setOnCheckedChangeListener(this);
-
         restoreRadioGroup(savedInstanceState);
         morphToReady(morphButton, 0);
 
@@ -148,36 +145,6 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
                 savedInstanceState.getBundle("mapViewSaveState") : null;
         mapView.onCreate(mapViewSavedInstanceState);
         mapView.getMapAsync(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        mapView.onResume();
-        presenter.startLocationUpdates();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        mapView.onPause();
-        presenter.pause();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-
-        mapView.onLowMemory();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        mapView.onDestroy();
     }
 
 
@@ -271,8 +238,10 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
 
         destinationMarker = googleMap.addMarker(new MarkerOptions().position(latLng));
 
-        presenter.computeDirection(new LatLongPair(currentPosition.latitude, currentPosition.longitude),
-                new LatLongPair(destination.latitude, destination.longitude));
+        presenter.computeDirection(
+                new LatLongPair(currentPosition.latitude, currentPosition.longitude),
+                new LatLongPair(destination.latitude, destination.longitude)
+        );
     }
 
     @OnClick(R.id.my_location_fab)
@@ -283,35 +252,23 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
     }
 
     @OnClick(R.id.morph_btn)
-    public void confirmButtonClick(){
+    public void confirmButtonClick() {
         morphButtonClicked = !morphButtonClicked;
 
         if (morphButtonClicked) {
             showConfirmDialog();
         } else {
             FusedLocationService.SEND_LOCATION_TO_SERVER = false;
-            // this is required by server, so it knows that there's no point in sending
+            // this is required by a server, so it knows that there's no point in sending
             // messages that ask to change a route
             presenter.changeDeviceStatus(getString(R.string.non_driver_mode));
+            presenter.setupUserMode(NON_DRIVER_MODE);
             morphToReady(morphButton, integer(R.integer.mb_animation));
         }
     }
 
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-        switch (checkedId){
-            case R.id.rb_ambulance:
-                presenter.setupUserMode(AMBULANCE_MODE);
-                break;
-            case R.id.rb_driver:
-                presenter.setupUserMode(DRIVER_MODE);
-                break;
-        }
-    }
-
     private void restoreRadioGroup(Bundle savedInstanceState){
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             ambulanceMode.setChecked(savedInstanceState.getBoolean(MODE_STATE));
             driverMode.setChecked(!savedInstanceState.getBoolean(MODE_STATE));
         }
@@ -371,6 +328,13 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
                 .setDescription(description)
                 .setPositive(getString(R.string.dialog_positive), (dialog, which) -> {
                     simulateProgress(morphButton);
+
+                    if (driverMode.isChecked()) {
+                        presenter.setupUserMode(DRIVER_MODE);
+                    } else {
+                        presenter.setupUserMode(AMBULANCE_MODE);
+                    }
+
                     // send current/destination coordinates & driver/ambulance status
                     presenter.setupDestination(new LatLongPair(destination.latitude, destination.longitude));
                     // and start sending ongoing location updates
@@ -423,5 +387,35 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
 
     private int integer(@IntegerRes int resId) {
         return getResources().getInteger(resId);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mapView.onResume();
+        presenter.startLocationUpdates();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        mapView.onPause();
+        presenter.pause();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+
+        mapView.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mapView.onDestroy();
     }
 }

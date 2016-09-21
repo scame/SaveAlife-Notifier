@@ -17,7 +17,8 @@ import rx.Observable;
 public interface ServerApi {
 
     @PUT("http://10.0.1.6:8080/rest/user")
-    Observable<ResponseBody> tokenUpdateRequest(@Body TokenUpdateEntity tokenEntity);
+    Observable<ResponseBody> tokenUpdateRequest(@Body TokenUpdateEntity tokenEntity,
+                                                @Query("role") String role);
 
     @POST("http://10.0.1.6:8080/rest/user")
     Observable<ResponseBody> sendLocationToServer(@Body LocationMessageEntity locationEntity,

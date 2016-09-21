@@ -48,7 +48,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         RegistrationEntity registrationEntity = new RegistrationEntity();
         registrationEntity.setCurrentToken(tokenManager.getActiveToken());
 
-        return serverApi.sendRegistrationRequest(registrationEntity, "person");
+        return serverApi.sendRegistrationRequest(registrationEntity, context.getString(R.string.non_driver_mode));
     }
 
     @Override
@@ -56,7 +56,6 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         LatLongPair latLong = getCurrentLatLong();
 
         LocationMessageEntity locationEntity = new LocationMessageEntity();
-
 
         locationEntity.setCurrentToken(tokenManager.getActiveToken());
         locationEntity.setCurrentLat(latLong.getLatitude());
@@ -76,7 +75,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         helpMessageEntity.setCurrentLat(latLong.getLatitude());
         helpMessageEntity.setMessage(helpMessage);
 
-        return serverApi.sendHelpMessage(helpMessageEntity, "person");
+        return serverApi.sendHelpMessage(helpMessageEntity, context.getString(R.string.non_driver_mode));
     }
 
 
@@ -92,6 +91,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         destinationEntity.setDestinationLon(destination.getLongitude());
         destinationEntity.setCurrentToken(tokenManager.getActiveToken());
 
+
         return serverApi.sendDestination(destinationEntity, getCurrentMode());
     }
 
@@ -103,7 +103,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         tokenUpdateEntity.setCurrentToken(tokenManager.getActiveToken());
         tokenUpdateEntity.setOldToken(tokenManager.getOldToken());
 
-        return serverApi.tokenUpdateRequest(tokenUpdateEntity);
+        return serverApi.tokenUpdateRequest(tokenUpdateEntity, getCurrentMode());
     }
 
     @Override
@@ -129,8 +129,10 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
                 return context.getString(R.string.driver_mode);
             case EndPointFragment.AMBULANCE_MODE:
                 return context.getString(R.string.ambulance_mode);
+            case EndPointFragment.NON_DRIVER_MODE:
+                return context.getString(R.string.non_driver_mode);
             default:
-                return context.getString(R.string.driver_mode);
+                return context.getString(R.string.non_driver_mode);
         }
     }
 }
