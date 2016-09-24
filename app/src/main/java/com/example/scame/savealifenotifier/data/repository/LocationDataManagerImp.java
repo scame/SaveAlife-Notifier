@@ -117,4 +117,15 @@ public class LocationDataManagerImp implements ILocationDataManager, GoogleApiCl
         sp.edit().putString(context.getString(R.string.current_latitude), latitude).apply();
         sp.edit().putString(context.getString(R.string.current_longitude), longitude).apply();
     }
+
+    @Override
+    public LatLongPair getCurrentLocation() {
+        Context context = SaveAlifeApp.getAppComponent().getApp();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+
+        double latitude = Double.valueOf(sp.getString(context.getString(R.string.current_latitude), ""));
+        double longitude = Double.valueOf(sp.getString(context.getString(R.string.current_longitude), ""));
+
+        return new LatLongPair(latitude, longitude);
+    }
 }

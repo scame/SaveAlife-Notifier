@@ -8,6 +8,12 @@ public class LocationMessageEntity {
 
     private double currentLon;
 
+    private boolean enable;
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
     public void setCurrentToken(String currentToken) {
         this.currentToken = currentToken;
     }
@@ -31,5 +37,9 @@ public class LocationMessageEntity {
 
     public double getCurrentLon() {
         return currentLon;
+    }
+
+    public boolean isEnable() {
+        return enable;
     }
 }

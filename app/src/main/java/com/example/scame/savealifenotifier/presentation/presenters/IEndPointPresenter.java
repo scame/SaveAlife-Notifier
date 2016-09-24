@@ -24,5 +24,5 @@ public interface IEndPointPresenter<T> extends Presenter<T> {
 
     void setupUserMode(int mode);
 
-    void changeDeviceStatus(String status);
+    void changeDeviceStatus();
 }

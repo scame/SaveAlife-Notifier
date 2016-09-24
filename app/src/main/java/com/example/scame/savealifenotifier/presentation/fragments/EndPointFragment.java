@@ -36,6 +36,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -212,8 +213,11 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
             }
 
             currentPosition = new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude());
-            currentPositionMarker = googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude())));
+            currentPositionMarker = googleMap.addMarker(
+                    new MarkerOptions().position(new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude()))
+            );
+            currentPositionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_lens_black_24dp));
+
             currentPositionCircle = googleMap.addCircle(new CircleOptions()
                     .fillColor(R.color.colorPrimary)
                     .strokeColor(R.color.colorPrimaryDark)
@@ -228,6 +232,8 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
             }
         }
     }
+
+
 
     private void updateDestinationPoint(LatLng latLng) {
         this.destination = latLng;
@@ -261,8 +267,8 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
             FusedLocationService.SEND_LOCATION_TO_SERVER = false;
             // this is required by a server, so it knows that there's no point in sending
             // messages that ask to change a route
-            presenter.changeDeviceStatus(getString(R.string.non_driver_mode));
             presenter.setupUserMode(NON_DRIVER_MODE);
+            presenter.changeDeviceStatus();
             morphToReady(morphButton, integer(R.integer.mb_animation));
         }
     }

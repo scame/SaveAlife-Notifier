@@ -23,6 +23,8 @@ import com.google.android.gms.location.LocationServices;
 
 import javax.inject.Inject;
 
+import okhttp3.ResponseBody;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -95,7 +97,22 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
             messagesDataManager.sendLocationMessage()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(responseBody -> Log.i("onxCompleted", "location request"));
+                    .subscribe(new Subscriber<ResponseBody>() {
+                        @Override
+                        public void onCompleted() {
+                            Log.i("onxUpdateCompleted", "true");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.i("onxErrorUpdate", e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onNext(ResponseBody responseBody) {
+                            Log.i("onxNextUpdate", "true");
+                        }
+                    });
         }
     }
 

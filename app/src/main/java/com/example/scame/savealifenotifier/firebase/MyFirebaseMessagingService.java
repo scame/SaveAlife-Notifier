@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -77,7 +78,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.putExtra(GoogleHelpMapActivity.class.getCanonicalName(), helpMessage);
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_autorenew_black_24dp)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_announcement_black_24dp))
+                        .setSmallIcon(R.drawable.ic_announcement_black_24dp)
                         .setContentTitle("global: someone needs help")
                         .setContentText(helpMessage.getMessage());
 
@@ -100,7 +102,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.putExtra(DriversHelpMapActivity.class.getCanonicalName(), messageModel);
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_autorenew_black_24dp)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_announcement_black_24dp))
+                        .setSmallIcon(R.drawable.ic_announcement_black_24dp)
                         .setContentTitle("drivers: someone needs help")
                         .setContentText(messageModel.getMessageBody());
 

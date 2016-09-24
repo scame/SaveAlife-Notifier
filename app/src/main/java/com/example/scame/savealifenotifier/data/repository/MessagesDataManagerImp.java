@@ -2,8 +2,6 @@ package com.example.scame.savealifenotifier.data.repository;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.SaveAlifeApp;
@@ -27,20 +25,21 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
     private ServerApi serverApi;
 
     private Context context;
-    private SharedPreferences sharedPrefs;
 
     private IFirebaseTokenManager tokenManager;
 
     private IUserDataManager userDataManager;
+
+    private ILocationDataManager locationDataManager;
 
     public MessagesDataManagerImp() {
         retrofit = SaveAlifeApp.getAppComponent().getRetrofit();
         serverApi = retrofit.create(ServerApi.class);
         tokenManager = new FirebaseTokenManagerImp();
         userDataManager = new UserDataManagerImp();
+        locationDataManager = new LocationDataManagerImp();
 
         context = SaveAlifeApp.getAppComponent().getApp();
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
 
     @Override
     public Observable<ResponseBody> sendLocationMessage() {
-        LatLongPair latLong = getCurrentLatLong();
+        LatLongPair latLong = locationDataManager.getCurrentLocation();
 
         LocationMessageEntity locationEntity = new LocationMessageEntity();
 
@@ -61,12 +60,16 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         locationEntity.setCurrentLat(latLong.getLatitude());
         locationEntity.setCurrentLon(latLong.getLongitude());
 
+        if (getCurrentMode().equals(context.getString(R.string.ambulance_mode))) {
+            locationEntity.setEnable(true);
+        }
+
         return serverApi.sendLocationToServer(locationEntity, getCurrentMode());
     }
 
     @Override
     public Observable<ResponseBody> sendHelpMeMessage(String helpMessage) {
-        LatLongPair latLong = getCurrentLatLong();
+        LatLongPair latLong = locationDataManager.getCurrentLocation();
 
         HelpMessageEntity helpMessageEntity = new HelpMessageEntity();
 
@@ -81,7 +84,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
 
     @Override
     public Observable<ResponseBody> sendDestinationMessage(LatLongPair destination) {
-        LatLongPair currentLatLong = getCurrentLatLong();
+        LatLongPair currentLatLong = locationDataManager.getCurrentLocation();
 
         DestinationEntity destinationEntity = new DestinationEntity();
 
@@ -98,27 +101,23 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
 
     @Override
     public Observable<ResponseBody> sendUpdateTokenRequest() {
+        IFirebaseTokenManager tokenManager = new FirebaseTokenManagerImp();
+
         TokenUpdateEntity tokenUpdateEntity = new TokenUpdateEntity();
-
-        tokenUpdateEntity.setCurrentToken(tokenManager.getActiveToken());
         tokenUpdateEntity.setOldToken(tokenManager.getOldToken());
+        tokenUpdateEntity.setCurrentToken(tokenManager.getActiveToken());
 
-        return serverApi.tokenUpdateRequest(tokenUpdateEntity, getCurrentMode());
+        return serverApi.tokenUpdateRequest(tokenUpdateEntity);
     }
 
     @Override
-    public Observable<ResponseBody> sendChangeStatusRequest(String status) {
+    public Observable<ResponseBody> sendChangeStatusRequest() {
         StatusEntity statusEntity = new StatusEntity();
+
         statusEntity.setCurrentToken(tokenManager.getActiveToken());
+        statusEntity.setRole(getCurrentMode());
 
-        return serverApi.changeStatus(statusEntity, status);
-    }
-
-    private LatLongPair getCurrentLatLong() {
-        double latitude = Double.valueOf(sharedPrefs.getString(context.getString(R.string.current_latitude), ""));
-        double longitude = Double.valueOf(sharedPrefs.getString(context.getString(R.string.current_longitude), ""));
-
-        return new LatLongPair(latitude, longitude);
+        return serverApi.changeStatus(statusEntity);
     }
 
     private String getCurrentMode() {

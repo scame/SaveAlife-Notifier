@@ -19,8 +19,6 @@ import java.util.List;
 
 public class DriversHelpMapActivity extends BaseActivity implements OnMapReadyCallback {
 
-    private GoogleMap googleMap;
-
     private List<LatLng> latLngList;
 
     private String message;
@@ -46,11 +44,9 @@ public class DriversHelpMapActivity extends BaseActivity implements OnMapReadyCa
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.googleMap =  googleMap;
-
         if (latLngList != null) {
             googleMap.addPolyline(new PolylineOptions().addAll(latLngList));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngList.get(0), 9));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngList.get(0), 12));
         }
     }
 

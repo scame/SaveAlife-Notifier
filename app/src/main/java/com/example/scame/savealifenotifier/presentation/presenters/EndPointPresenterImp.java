@@ -32,6 +32,8 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
 
     private DeviceStatusUseCase deviceStatusUseCase;
 
+    private LatLongPair destination;
+
     private T view;
 
     public EndPointPresenterImp(ReverseGeocodeUseCase reverseGeocodeUseCase,
@@ -70,8 +72,9 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
 
     @Override
     public void setupDestination(LatLongPair latLongPair) {
-        destinationUseCase.setLatLongPair(latLongPair);
-        destinationUseCase.execute(new DestinationSubscriber());
+        this.destination = latLongPair;
+
+        deviceStatusUseCase.execute(new DeviceStatusSubscriber());
     }
 
     @Override
@@ -81,8 +84,7 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
     }
 
     @Override
-    public void changeDeviceStatus(String status) {
-        deviceStatusUseCase.setDeviceStatus(status);
+    public void changeDeviceStatus() {
         deviceStatusUseCase.execute(new DefaultSubscriber<>());
     }
 
@@ -104,6 +106,17 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
     @Override
     public void destroy() {
 
+    }
+
+    private final class DeviceStatusSubscriber extends DefaultSubscriber<ResponseBody> {
+
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
+
+            destinationUseCase.setLatLongPair(destination);
+            destinationUseCase.execute(new DestinationSubscriber());
+        }
     }
 
     private final class DestinationSubscriber extends DefaultSubscriber<ResponseBody> {

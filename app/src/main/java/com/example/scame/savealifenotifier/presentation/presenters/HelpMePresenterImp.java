@@ -4,6 +4,7 @@ package com.example.scame.savealifenotifier.presentation.presenters;
 import android.util.Log;
 
 import com.example.scame.savealifenotifier.domain.usecases.DefaultSubscriber;
+import com.example.scame.savealifenotifier.domain.usecases.DeviceStatusUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.HelpMessageUseCase;
 
 import java.io.IOException;
@@ -16,34 +17,33 @@ public class HelpMePresenterImp<T extends IHelpMePresenter.HelpMeView> implement
 
     private HelpMessageUseCase helpMessageUseCase;
 
-    public HelpMePresenterImp(HelpMessageUseCase helpMessageUseCase) {
+    private DeviceStatusUseCase deviceStatusUseCase;
+
+    private String helpMessage;
+
+    public HelpMePresenterImp(HelpMessageUseCase helpMessageUseCase,
+                              DeviceStatusUseCase deviceStatusUseCase) {
+
         this.helpMessageUseCase = helpMessageUseCase;
+        this.deviceStatusUseCase = deviceStatusUseCase;
     }
 
     @Override
     public void sendHelpMessage(String message) {
-        helpMessageUseCase.setMessage(message);
-        helpMessageUseCase.execute(new HelpMessageSubscriber());
+        helpMessage = message;
+
+        deviceStatusUseCase.execute(new DeviceStatusSubscriber());
     }
 
-    @Override
-    public void setView(T view) {
-        this.view = view;
-    }
+    private final class DeviceStatusSubscriber extends DefaultSubscriber<ResponseBody> {
 
-    @Override
-    public void resume() {
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
 
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void destroy() {
-
+            helpMessageUseCase.setMessage(helpMessage);
+            helpMessageUseCase.execute(new HelpMessageSubscriber());
+        }
     }
 
     private final class HelpMessageSubscriber extends DefaultSubscriber<ResponseBody> {
@@ -72,5 +72,25 @@ public class HelpMePresenterImp<T extends IHelpMePresenter.HelpMeView> implement
 
             Log.i("onxError", e.getLocalizedMessage());
         }
+    }
+
+    @Override
+    public void setView(T view) {
+        this.view = view;
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }
