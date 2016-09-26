@@ -69,7 +69,7 @@ dependencies {
     compile 'com.github.jorgecastilloprz:fillableloaders:1.03@aar'
     compile 'pl.bclogic:pulsator4droid:1.0.2'
 
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.1'
 
     compile 'info.hoang8f:android-segmented:1.0.6'
 }

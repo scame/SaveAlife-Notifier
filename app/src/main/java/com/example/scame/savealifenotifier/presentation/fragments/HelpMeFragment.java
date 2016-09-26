@@ -24,12 +24,13 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
 
     private static final int PULSE_COUNT = 4;
     private static final int PULSE_DURATION = 7000;
+    private static final String HELP_ME_VISIBILITY = "Help me visibility";
 
     @Inject
     IHelpMePresenter<IHelpMePresenter.HelpMeView> presenter;
 
-    @BindView(R.id.help_me_end_btn) PulsatorLayout pulsatorGreen;
-    @BindView(R.id.help_me_start_btn) PulsatorLayout pulsatorRed;
+    @BindView(R.id.help_me_end_btn) PulsatorLayout helpMeEnd;
+    @BindView(R.id.help_me_start_btn) PulsatorLayout helpMeStart;
 
 
     @Nullable
@@ -43,20 +44,42 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
         presenter.setView(this);
 
         configurePulsator();
-
+        restoreHelpButton(savedInstanceState);
         return fragmentView;
     }
 
     private void configurePulsator() {
-        pulsatorGreen.setCount(PULSE_COUNT);
-        pulsatorGreen.setDuration(PULSE_DURATION);
-        pulsatorGreen.start();
+        helpMeEnd.setCount(PULSE_COUNT);
+        helpMeEnd.setDuration(PULSE_DURATION);
+        helpMeEnd.start();
 
-        pulsatorRed.setCount(PULSE_COUNT);
-        pulsatorRed.setDuration(PULSE_DURATION);
-        pulsatorRed.start();
+        helpMeStart.setCount(PULSE_COUNT);
+        helpMeStart.setDuration(PULSE_DURATION);
+        helpMeStart.start();
     }
 
+    private void restoreHelpButton(Bundle savedInstanceState) {
+        if (savedInstanceState != null){
+            //Log.i("helpmebtn", String.valueOf(savedInstanceState.getInt(HELP_ME_VISIBILITY)));
+            switch(savedInstanceState.getInt(HELP_ME_VISIBILITY)){
+                case View.VISIBLE:
+                    helpMeStart.setVisibility(View.VISIBLE);
+                    helpMeEnd.setVisibility(View.GONE);
+                    break;
+                case View.INVISIBLE:
+                    helpMeStart.setVisibility(View.GONE);
+                    helpMeEnd.setVisibility(View.VISIBLE);
+                    break;
+                case View.GONE:
+                    helpMeStart.setVisibility(View.GONE);
+                    helpMeEnd.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    helpMeStart.setVisibility(View.VISIBLE);
+                    helpMeEnd.setVisibility(View.GONE);
+            }
+        }
+    }
 
     @OnClick(R.id.help_me_start_btn)
     public void onHelpMeClickStart() {
@@ -76,15 +99,15 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
     private void showMaterialDialog() {
         MaterialStyledDialog materialDialog;
 
-        if (pulsatorRed.getVisibility() == View.VISIBLE) {
+        if (helpMeStart.getVisibility() == View.VISIBLE) {
             materialDialog = new MaterialStyledDialog(getContext())
                     .withDialogAnimation(true)
                     .setHeaderColor(R.color.colorPrimary)
                     .setDescription("Do you really need help?")
                     .setPositive(getString(R.string.dialog_positive), (dialog, which) -> {
                         presenter.sendHelpMessage("help me test");
-                        pulsatorGreen.setVisibility(View.VISIBLE);
-                        pulsatorRed.setVisibility(View.INVISIBLE);
+                        helpMeEnd.setVisibility(View.VISIBLE);
+                        helpMeStart.setVisibility(View.INVISIBLE);
                     });
 
         } else  {
@@ -93,8 +116,8 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
                     .setDescription("You don't need help anymore?")
                     .setPositive(getString(R.string.dialog_positive), (dialog, which) -> {
                         // TODO: send an end message
-                        pulsatorRed.setVisibility(View.VISIBLE);
-                        pulsatorGreen.setVisibility(View.INVISIBLE);
+                        helpMeStart.setVisibility(View.VISIBLE);
+                        helpMeEnd.setVisibility(View.INVISIBLE);
                     });
         }
 
@@ -109,5 +132,12 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
                 .build();
 
         materialDialog.show();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //Log.i("helpmebtn", String.valueOf(helpMeStart.getVisibility()));
+        outState.putInt(HELP_ME_VISIBILITY, helpMeStart.getVisibility());
+        super.onSaveInstanceState(outState);
     }
 }

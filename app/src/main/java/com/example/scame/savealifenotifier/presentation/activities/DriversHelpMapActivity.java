@@ -46,7 +46,7 @@ public class DriversHelpMapActivity extends BaseActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         if (latLngList != null) {
             googleMap.addPolyline(new PolylineOptions().addAll(latLngList));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngList.get(0), 12));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngList.get(0), 13));
         }
     }
 

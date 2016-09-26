@@ -37,8 +37,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -54,7 +52,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EndPointFragment  extends BaseFragment implements OnMapReadyCallback, IEndPointPresenter.EndPointView {
+public class EndPointFragment extends BaseFragment implements OnMapReadyCallback, IEndPointPresenter.EndPointView {
 
     public static final int DRIVER_MODE = 0;
     public static final int AMBULANCE_MODE = 1;
@@ -66,13 +64,18 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
 
     private static View fragmentView;
 
-    @BindView(R.id.morph_btn) LinearProgressButton morphButton;
-    @BindView(R.id.mapview) MapView mapView;
+    @BindView(R.id.morph_btn)
+    LinearProgressButton morphButton;
+    @BindView(R.id.mapview)
+    MapView mapView;
 
-    @BindView(R.id.rb_ambulance) RadioButton ambulanceMode;
-    @BindView(R.id.rb_driver) RadioButton driverMode;
+    @BindView(R.id.rb_ambulance)
+    RadioButton ambulanceMode;
+    @BindView(R.id.rb_driver)
+    RadioButton driverMode;
 
-    @BindView(R.id.rg_mode) RadioGroup modeToggle;
+    @BindView(R.id.rg_mode)
+    RadioGroup modeToggle;
 
     private boolean morphButtonClicked;
 
@@ -82,7 +85,6 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
     private LatLng currentPosition;
 
     private Marker currentPositionMarker;
-    private Circle currentPositionCircle;
     private Polyline currentPolyline;
 
     private Marker destinationMarker;
@@ -209,30 +211,27 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
 
             if (currentPositionMarker != null) {
                 currentPositionMarker.remove();
-                currentPositionCircle.remove();
             }
 
             currentPosition = new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude());
             currentPositionMarker = googleMap.addMarker(
                     new MarkerOptions().position(new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude()))
             );
-            currentPositionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_lens_black_24dp));
+            currentPositionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.red_circle));
+            currentPositionMarker.setAlpha(0.6f);
 
-            currentPositionCircle = googleMap.addCircle(new CircleOptions()
-                    .fillColor(R.color.colorPrimary)
-                    .strokeColor(R.color.colorPrimaryDark)
-                    .center(new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude()))
-                    .radius(CIRCLE_RADIUS));
-
-            if (destination != null) {
-                presenter.computeDirection(
-                        new LatLongPair(currentPosition.latitude, currentPosition.longitude),
-                        new LatLongPair(destination.latitude, destination.longitude)
-                );
-            }
+            updateDestination();
         }
     }
 
+    private void updateDestination() {
+        if (destination != null) {
+            presenter.computeDirection(
+                    new LatLongPair(currentPosition.latitude, currentPosition.longitude),
+                    new LatLongPair(destination.latitude, destination.longitude)
+            );
+        }
+    }
 
 
     private void updateDestinationPoint(LatLng latLng) {
@@ -273,7 +272,7 @@ public class EndPointFragment  extends BaseFragment implements OnMapReadyCallbac
         }
     }
 
-    private void restoreRadioGroup(Bundle savedInstanceState){
+    private void restoreRadioGroup(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             ambulanceMode.setChecked(savedInstanceState.getBoolean(MODE_STATE));
             driverMode.setChecked(!savedInstanceState.getBoolean(MODE_STATE));

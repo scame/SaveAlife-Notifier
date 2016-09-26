@@ -39,6 +39,7 @@ public class SplashScreenActivity extends AppCompatActivity implements OnStateCh
                 break;
             case State.FINISHED:
                 startActivity(new Intent(this, PageActivity.class));
+                finish();
                 break;
         }
     }

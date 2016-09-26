@@ -18,11 +18,17 @@
         <activity android:name=".presentation.activities.FirebaseTestActivity">
 
         </activity>
-
-        <activity android:name=".presentation.activities.PageActivity" >
+        <activity android:name=".presentation.activities.PreSplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".presentation.activities.PageActivity" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
