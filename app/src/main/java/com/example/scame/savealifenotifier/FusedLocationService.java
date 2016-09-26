@@ -2,11 +2,9 @@ package com.example.scame.savealifenotifier;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -32,8 +30,6 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    public static boolean SEND_LOCATION_TO_SERVER;
-
     private GoogleApiClient googleApiClient;
 
     private long UPDATE_INTERVAL = 20 * 1000;
@@ -57,9 +53,6 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-
-        SEND_LOCATION_TO_SERVER = PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean(getString(R.string.isLocationUpdatesActive), false);
     }
 
     @Override
@@ -93,7 +86,7 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
         locationDataManager.saveCurrentLocation(latLongPair);
 
         // send only if token is already generated
-        if (!tokenManager.getActiveToken().equals("") && SEND_LOCATION_TO_SERVER) {
+        if (!tokenManager.getActiveToken().equals("")) {
             messagesDataManager.sendLocationMessage()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -150,15 +143,6 @@ public class FusedLocationService extends Service implements GoogleApiClient.Con
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
             googleApiClient.disconnect();
         }
-
-        cacheUpdatesVariable();
-    }
-
-    private void cacheUpdatesVariable() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPreferences.edit()
-                .putBoolean(getString(R.string.isLocationUpdatesActive), SEND_LOCATION_TO_SERVER)
-                .apply();
     }
 
     @Nullable
