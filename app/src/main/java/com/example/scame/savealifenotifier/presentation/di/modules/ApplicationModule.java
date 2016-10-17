@@ -1,6 +1,6 @@
 package com.example.scame.savealifenotifier.presentation.di.modules;
 
-import android.app.Application;
+import android.content.Context;
 
 import com.example.scame.savealifenotifier.domain.schedulers.ObserveOn;
 import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
@@ -15,16 +15,16 @@ import rx.schedulers.Schedulers;
 @Module
 public class ApplicationModule {
 
-    private Application app;
+    private Context context;
 
-    public ApplicationModule(Application app) {
-        this.app = app;
+    public ApplicationModule(Context context) {
+        this.context = context;
     }
 
     @Singleton
     @Provides
-    Application provideApplication() {
-        return app;
+    Context provideContext() {
+        return context;
     }
 
     @Singleton

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -27,6 +26,10 @@ import rx.subscriptions.Subscriptions;
 public class LocationDataManagerImp implements ILocationDataManager, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    private SharedPreferences sharedPrefs;
+
+    private Context context;
+
     private GoogleApiClient googleApiClient;
 
     private LocationRequest locationRequest;
@@ -37,6 +40,11 @@ public class LocationDataManagerImp implements ILocationDataManager, GoogleApiCl
 
     private long UPDATE_INTERVAL = 10 * 1000;
     private long FASTEST_INTERVAL = 2000;
+
+    public LocationDataManagerImp(SharedPreferences sharedPrefs, Context context) {
+        this.sharedPrefs = sharedPrefs;
+        this.context = context;
+    }
 
     @SuppressWarnings({"MissingPermission"})
     public Observable<LatLongPair> startLocationUpdates() {
@@ -108,23 +116,17 @@ public class LocationDataManagerImp implements ILocationDataManager, GoogleApiCl
 
     @Override
     public void saveCurrentLocation(LatLongPair latLongPair) {
-        Context context = SaveAlifeApp.getAppComponent().getApp();
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-
         String latitude = String.valueOf(latLongPair.getLatitude());
         String longitude = String.valueOf(latLongPair.getLongitude());
 
-        sp.edit().putString(context.getString(R.string.current_latitude), latitude).apply();
-        sp.edit().putString(context.getString(R.string.current_longitude), longitude).apply();
+        sharedPrefs.edit().putString(context.getString(R.string.current_latitude), latitude).apply();
+        sharedPrefs.edit().putString(context.getString(R.string.current_longitude), longitude).apply();
     }
 
     @Override
     public LatLongPair getCurrentLocation() {
-        Context context = SaveAlifeApp.getAppComponent().getApp();
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-
-        double latitude = Double.valueOf(sp.getString(context.getString(R.string.current_latitude), ""));
-        double longitude = Double.valueOf(sp.getString(context.getString(R.string.current_longitude), ""));
+        double latitude = Double.valueOf(sharedPrefs.getString(context.getString(R.string.current_latitude), ""));
+        double longitude = Double.valueOf(sharedPrefs.getString(context.getString(R.string.current_longitude), ""));
 
         return new LatLongPair(latitude, longitude);
     }

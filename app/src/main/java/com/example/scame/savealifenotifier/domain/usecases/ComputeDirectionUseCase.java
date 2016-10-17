@@ -2,7 +2,6 @@ package com.example.scame.savealifenotifier.domain.usecases;
 
 
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
-import com.example.scame.savealifenotifier.data.mappers.DirectionModelMapper;
 import com.example.scame.savealifenotifier.data.repository.IDirectionsDataManager;
 import com.example.scame.savealifenotifier.domain.schedulers.ObserveOn;
 import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
@@ -17,19 +16,14 @@ public class ComputeDirectionUseCase extends UseCase<DirectionModel> {
     private LatLongPair origin;
     private LatLongPair destination;
 
-    public ComputeDirectionUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                                   IDirectionsDataManager dataManager) {
-
+    public ComputeDirectionUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, IDirectionsDataManager dataManager) {
         super(subscribeOn, observeOn);
         this.dataManager = dataManager;
     }
 
     @Override
     protected Observable<DirectionModel> getUseCaseObservable() {
-        DirectionModelMapper mapper = new DirectionModelMapper();
-
-        return dataManager.getDirections(origin, destination)
-                .map(mapper::convert);
+        return dataManager.getDirections(origin, destination);
     }
 
     public void setOrigin(LatLongPair origin) {

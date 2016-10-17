@@ -14,7 +14,6 @@ public class DeviceStatusUseCase extends UseCase<ResponseBody> {
 
     public DeviceStatusUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, IMessagesDataManager dataManager) {
         super(subscribeOn, observeOn);
-
         this.dataManager = dataManager;
     }
 

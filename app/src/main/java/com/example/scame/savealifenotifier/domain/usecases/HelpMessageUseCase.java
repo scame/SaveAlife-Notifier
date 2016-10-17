@@ -14,9 +14,7 @@ public class HelpMessageUseCase extends UseCase<ResponseBody> {
 
     private String message;
 
-    public HelpMessageUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                              IMessagesDataManager messagesDataManager) {
-
+    public HelpMessageUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, IMessagesDataManager messagesDataManager) {
         super(subscribeOn, observeOn);
         this.messagesDataManager = messagesDataManager;
     }

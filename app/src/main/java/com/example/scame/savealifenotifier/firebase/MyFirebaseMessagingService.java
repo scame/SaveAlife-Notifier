@@ -11,10 +11,10 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.example.scame.savealifenotifier.R;
+import com.example.scame.savealifenotifier.SaveAlifeApp;
 import com.example.scame.savealifenotifier.data.mappers.DriverMessageMapper;
 import com.example.scame.savealifenotifier.data.mappers.HelpMessageMapper;
 import com.example.scame.savealifenotifier.data.repository.IUserDataManager;
-import com.example.scame.savealifenotifier.data.repository.UserDataManagerImp;
 import com.example.scame.savealifenotifier.presentation.activities.DriversHelpMapActivity;
 import com.example.scame.savealifenotifier.presentation.activities.GoogleHelpMapActivity;
 import com.example.scame.savealifenotifier.presentation.fragments.EndPointFragment;
@@ -23,6 +23,8 @@ import com.example.scame.savealifenotifier.presentation.models.HelpMessageModel;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import javax.inject.Inject;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "logMessagingService";
@@ -30,10 +32,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final int COMMON_MSG_ID = 1;
     private static final int DRIVERS_MSG_ID = 2;
 
-    private IUserDataManager userDataManager;
+    @Inject IUserDataManager userDataManager;
 
     public MyFirebaseMessagingService() {
-        userDataManager = new UserDataManagerImp();
+        SaveAlifeApp.getAppComponent().inject(this);
     }
 
     @Override
@@ -74,13 +76,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendCommonNotification(HelpMessageModel helpMessage) {
 
+        Log.i("onxGotIt", helpMessage.getLatitude() + " " + helpMessage.getLongitude());
         Intent intent = new Intent(this, GoogleHelpMapActivity.class);
         intent.putExtra(GoogleHelpMapActivity.class.getCanonicalName(), helpMessage);
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_announcement_black_24dp))
                         .setSmallIcon(R.drawable.ic_announcement_black_24dp)
-                        .setContentTitle("global: someone needs help")
+                        .setContentTitle("SaveAlife")
+                        .setAutoCancel(true)
                         .setContentText(helpMessage.getMessage());
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -104,7 +108,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 new NotificationCompat.Builder(this)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_announcement_black_24dp))
                         .setSmallIcon(R.drawable.ic_announcement_black_24dp)
-                        .setContentTitle("drivers: someone needs help")
+                        .setContentTitle("SaveAlife")
+                        .setAutoCancel(true)
                         .setContentText(messageModel.getMessageBody());
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

@@ -105,7 +105,7 @@ public class HelpMeFragment extends BaseFragment implements IHelpMePresenter.Hel
                     .setHeaderColor(R.color.colorPrimary)
                     .setDescription("Do you really need help?")
                     .setPositive(getString(R.string.dialog_positive), (dialog, which) -> {
-                        presenter.sendHelpMessage("help me test");
+                        presenter.sendHelpMessage("[I've broken my leg]");
                         helpMeEnd.setVisibility(View.VISIBLE);
                         helpMeStart.setVisibility(View.INVISIBLE);
                     });

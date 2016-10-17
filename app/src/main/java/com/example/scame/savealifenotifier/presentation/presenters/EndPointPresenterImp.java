@@ -117,6 +117,13 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
             destinationUseCase.setLatLongPair(destination);
             destinationUseCase.execute(new DestinationSubscriber());
         }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+
+            Log.i("onxError", e.getLocalizedMessage());
+        }
     }
 
     private final class DestinationSubscriber extends DefaultSubscriber<ResponseBody> {
@@ -156,6 +163,13 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
             String latLng = addressModel.getFormattedAddress();
             view.showHumanReadableAddress(latLng);
         }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+
+            Log.i("onxError", e.getLocalizedMessage());
+        }
     }
 
     private final class DirectionSubscriber extends DefaultSubscriber<DirectionModel> {
@@ -165,6 +179,13 @@ public class EndPointPresenterImp<T extends IEndPointPresenter.EndPointView>
             super.onNext(directionModel);
 
             view.drawDirectionPolyline(directionModel.getPolyline());
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+
+            Log.i("onxError", e.getLocalizedMessage());
         }
     }
 

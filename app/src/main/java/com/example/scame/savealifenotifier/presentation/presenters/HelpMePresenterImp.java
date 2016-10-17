@@ -44,6 +44,13 @@ public class HelpMePresenterImp<T extends IHelpMePresenter.HelpMeView> implement
             helpMessageUseCase.setMessage(helpMessage);
             helpMessageUseCase.execute(new HelpMessageSubscriber());
         }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+
+            Log.i("onxError", "deviceStatusError + " + e.getLocalizedMessage());
+        }
     }
 
     private final class HelpMessageSubscriber extends DefaultSubscriber<ResponseBody> {

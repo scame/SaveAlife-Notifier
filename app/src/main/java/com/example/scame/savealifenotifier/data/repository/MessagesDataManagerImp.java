@@ -4,7 +4,6 @@ package com.example.scame.savealifenotifier.data.repository;
 import android.content.Context;
 
 import com.example.scame.savealifenotifier.R;
-import com.example.scame.savealifenotifier.SaveAlifeApp;
 import com.example.scame.savealifenotifier.data.api.ServerApi;
 import com.example.scame.savealifenotifier.data.entities.DestinationEntity;
 import com.example.scame.savealifenotifier.data.entities.HelpMessageEntity;
@@ -16,36 +15,36 @@ import com.example.scame.savealifenotifier.data.entities.TokenUpdateEntity;
 import com.example.scame.savealifenotifier.presentation.fragments.EndPointFragment;
 
 import okhttp3.ResponseBody;
-import retrofit2.Retrofit;
 import rx.Observable;
 
 public class MessagesDataManagerImp implements IMessagesDataManager {
 
-    private Retrofit retrofit;
-    private ServerApi serverApi;
-
     private Context context;
 
-    private IFirebaseTokenManager tokenManager;
+    private ServerApi serverApi;
+
+    private IFirebaseTokenManager firebaseTokenManager;
 
     private IUserDataManager userDataManager;
 
     private ILocationDataManager locationDataManager;
 
-    public MessagesDataManagerImp() {
-        retrofit = SaveAlifeApp.getAppComponent().getRetrofit();
-        serverApi = retrofit.create(ServerApi.class);
-        tokenManager = new FirebaseTokenManagerImp();
-        userDataManager = new UserDataManagerImp();
-        locationDataManager = new LocationDataManagerImp();
+    public MessagesDataManagerImp(ILocationDataManager locationDataManager,
+                                  IFirebaseTokenManager firebaseTokenManager,
+                                  IUserDataManager userDataManager,
+                                  ServerApi serverApi, Context context) {
 
-        context = SaveAlifeApp.getAppComponent().getApp();
+        this.context = context;
+        this.serverApi = serverApi;
+        this.firebaseTokenManager = firebaseTokenManager;
+        this.userDataManager = userDataManager;
+        this.locationDataManager = locationDataManager;
     }
 
     @Override
     public Observable<ResponseBody> sendRegistrationRequest() {
         RegistrationEntity registrationEntity = new RegistrationEntity();
-        registrationEntity.setCurrentToken(tokenManager.getActiveToken());
+        registrationEntity.setCurrentToken(firebaseTokenManager.getActiveToken());
 
         return serverApi.sendRegistrationRequest(registrationEntity, context.getString(R.string.non_driver_mode));
     }
@@ -56,14 +55,13 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
 
         LocationMessageEntity locationEntity = new LocationMessageEntity();
 
-        locationEntity.setCurrentToken(tokenManager.getActiveToken());
+        locationEntity.setCurrentToken(firebaseTokenManager.getActiveToken());
         locationEntity.setCurrentLat(latLong.getLatitude());
         locationEntity.setCurrentLon(latLong.getLongitude());
 
         if (getCurrentMode().equals(context.getString(R.string.ambulance_mode))) {
             locationEntity.setEnable(true);
         }
-
         return serverApi.sendLocationToServer(locationEntity, getCurrentMode());
     }
 
@@ -73,7 +71,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
 
         HelpMessageEntity helpMessageEntity = new HelpMessageEntity();
 
-        helpMessageEntity.setCurrentToken(tokenManager.getActiveToken());
+        helpMessageEntity.setCurrentToken(firebaseTokenManager.getActiveToken());
         helpMessageEntity.setCurrentLon(latLong.getLongitude());
         helpMessageEntity.setCurrentLat(latLong.getLatitude());
         helpMessageEntity.setMessage(helpMessage);
@@ -92,20 +90,16 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         destinationEntity.setCurrentLon(currentLatLong.getLongitude());
         destinationEntity.setDestinationLat(destination.getLatitude());
         destinationEntity.setDestinationLon(destination.getLongitude());
-        destinationEntity.setCurrentToken(tokenManager.getActiveToken());
-
+        destinationEntity.setCurrentToken(firebaseTokenManager.getActiveToken());
 
         return serverApi.sendDestination(destinationEntity, getCurrentMode());
     }
 
-
     @Override
     public Observable<ResponseBody> sendUpdateTokenRequest() {
-        IFirebaseTokenManager tokenManager = new FirebaseTokenManagerImp();
-
         TokenUpdateEntity tokenUpdateEntity = new TokenUpdateEntity();
-        tokenUpdateEntity.setOldToken(tokenManager.getOldToken());
-        tokenUpdateEntity.setCurrentToken(tokenManager.getActiveToken());
+        tokenUpdateEntity.setOldToken(firebaseTokenManager.getOldToken());
+        tokenUpdateEntity.setCurrentToken(firebaseTokenManager.getActiveToken());
 
         return serverApi.tokenUpdateRequest(tokenUpdateEntity);
     }
@@ -113,8 +107,7 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
     @Override
     public Observable<ResponseBody> sendChangeStatusRequest() {
         StatusEntity statusEntity = new StatusEntity();
-
-        statusEntity.setCurrentToken(tokenManager.getActiveToken());
+        statusEntity.setCurrentToken(firebaseTokenManager.getActiveToken());
         statusEntity.setRole(getCurrentMode());
 
         return serverApi.changeStatus(statusEntity);

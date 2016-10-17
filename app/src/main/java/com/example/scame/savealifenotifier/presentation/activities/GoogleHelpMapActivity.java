@@ -32,6 +32,8 @@ public class GoogleHelpMapActivity extends BaseActivity {
         if (mapIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(mapIntent);
         }
+
+        finish();
     }
 
 

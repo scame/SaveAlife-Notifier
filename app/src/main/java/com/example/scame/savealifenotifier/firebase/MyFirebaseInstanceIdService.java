@@ -3,12 +3,12 @@ package com.example.scame.savealifenotifier.firebase;
 import android.util.Log;
 
 import com.example.scame.savealifenotifier.SaveAlifeApp;
-import com.example.scame.savealifenotifier.data.repository.FirebaseTokenManagerImp;
 import com.example.scame.savealifenotifier.data.repository.IFirebaseTokenManager;
 import com.example.scame.savealifenotifier.data.repository.IMessagesDataManager;
-import com.example.scame.savealifenotifier.data.repository.MessagesDataManagerImp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import javax.inject.Inject;
 
 import okhttp3.ResponseBody;
 import rx.Subscriber;
@@ -19,13 +19,14 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
     private static final String TAG = "logTokenRefresh";
 
-    private IFirebaseTokenManager tokenManager;
+    @Inject
+    IFirebaseTokenManager firebaseTokenManager;
 
-    private IMessagesDataManager messagesDataManager;
+    @Inject
+    IMessagesDataManager messagesDataManager;
 
     public MyFirebaseInstanceIdService() {
-        tokenManager = new FirebaseTokenManagerImp();
-        messagesDataManager = new MessagesDataManagerImp();
+        SaveAlifeApp.getAppComponent().inject(this);
     }
 
     @Override
@@ -36,12 +37,27 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
         SaveAlifeApp.getAppComponent().inject(this);
         cacheToken(refreshedToken);
 
-        if (!tokenManager.getOldToken().equals("")) {
+        if (!firebaseTokenManager.getOldToken().equals("")) {
             messagesDataManager
                     .sendUpdateTokenRequest()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(responseBody -> Log.i("onxTokenUpdate", "updated"));
+                    .subscribe(new Subscriber<ResponseBody>() {
+                        @Override
+                        public void onCompleted() {
+                            Log.i("onxCompleted", "true");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.i("onxError", e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onNext(ResponseBody responseBody) {
+                            Log.i("onxNext", "next");
+                        }
+                    });
         } else {
             messagesDataManager
                     .sendRegistrationRequest()
@@ -68,7 +84,7 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
 
     private void cacheToken(String token) {
-        tokenManager.saveOldToken(tokenManager.getActiveToken());
-        tokenManager.saveRefreshedToken(token);
+        firebaseTokenManager.saveOldToken(firebaseTokenManager.getActiveToken());
+        firebaseTokenManager.saveRefreshedToken(token);
     }
 }

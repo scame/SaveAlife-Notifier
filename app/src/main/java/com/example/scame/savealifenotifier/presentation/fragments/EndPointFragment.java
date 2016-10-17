@@ -156,7 +156,6 @@ public class EndPointFragment extends BaseFragment implements OnMapReadyCallback
         this.googleMap = googleMap;
 
         googleMap.setOnMapLongClickListener(this::updateDestinationPoint);
-
         if (savedInstanceState != null) {
             List<LatLng> pathList = savedInstanceState.getParcelableArrayList(getString(R.string.path_key));
             LatLng currentLocation = savedInstanceState.getParcelable(getString(R.string.current_location_key));

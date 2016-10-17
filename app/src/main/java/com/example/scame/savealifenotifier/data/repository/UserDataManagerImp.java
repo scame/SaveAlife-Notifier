@@ -3,10 +3,8 @@ package com.example.scame.savealifenotifier.data.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.example.scame.savealifenotifier.R;
-import com.example.scame.savealifenotifier.SaveAlifeApp;
 import com.example.scame.savealifenotifier.presentation.fragments.EndPointFragment;
 
 public class UserDataManagerImp implements IUserDataManager {
@@ -14,9 +12,9 @@ public class UserDataManagerImp implements IUserDataManager {
     private SharedPreferences sharedPrefs;
     private Context context;
 
-    public UserDataManagerImp() {
-        context = SaveAlifeApp.getAppComponent().getApp();
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    public UserDataManagerImp(SharedPreferences sharedPrefs, Context context) {
+        this.sharedPrefs = sharedPrefs;
+        this.context = context;
     }
 
     @Override

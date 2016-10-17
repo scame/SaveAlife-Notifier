@@ -15,10 +15,7 @@ public class SetupDestinationUseCase extends UseCase<ResponseBody> {
 
     private LatLongPair latLongPair;
 
-
-    public SetupDestinationUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                                   IMessagesDataManager messagesDataManager) {
-
+    public SetupDestinationUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, IMessagesDataManager messagesDataManager) {
         super(subscribeOn, observeOn);
         this.messagesDataManager = messagesDataManager;
     }

@@ -11,8 +11,7 @@ public class LocationUpdatesUseCase extends UseCase<LatLongPair> {
 
     private ILocationDataManager dataManager;
 
-    public LocationUpdatesUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                                  ILocationDataManager dataManager) {
+    public LocationUpdatesUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, ILocationDataManager dataManager) {
         super(subscribeOn, observeOn);
         this.dataManager = dataManager;
     }
