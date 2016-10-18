@@ -38,7 +38,7 @@ public class SplashScreenActivity extends AppCompatActivity implements OnStateCh
                 fillableLoaderText.start();
                 break;
             case State.FINISHED:
-                startActivity(new Intent(this, PageActivity.class));
+                startActivity(new Intent(this, MapboxStarter.class));
                 finish();
                 break;
         }

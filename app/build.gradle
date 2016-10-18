@@ -72,6 +72,10 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
 
     compile 'info.hoang8f:android-segmented:1.0.6'
+
+    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.0-beta.1@aar'){
+        transitive=true
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'
