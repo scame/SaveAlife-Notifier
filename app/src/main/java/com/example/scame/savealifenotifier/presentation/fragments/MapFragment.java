@@ -1,6 +1,7 @@
 package com.example.scame.savealifenotifier.presentation.fragments;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
@@ -10,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +22,18 @@ import com.dd.morphingbutton.MorphingButton;
 import com.dd.morphingbutton.impl.LinearProgressButton;
 import com.example.scame.savealifenotifier.PrivateValues;
 import com.example.scame.savealifenotifier.R;
+import com.example.scame.savealifenotifier.data.entities.LatLongPair;
+import com.example.scame.savealifenotifier.presentation.presenters.IMapPresenter;
 import com.example.scame.savealifenotifier.presentation.utility.ProgressGenerator;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mapbox.mapboxsdk.MapboxAccountManager;
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.Polyline;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -34,11 +43,14 @@ import com.mapbox.services.android.geocoder.ui.GeocoderAutoCompleteView;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.geocoding.v5.GeocodingCriteria;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements IMapPresenter.MapView {
 
     public static final int DRIVER_MODE = 0;
     public static final int AMBULANCE_MODE = 1;
@@ -48,9 +60,15 @@ public class MapFragment extends Fragment {
 
     private boolean morphButtonClicked;
 
+    private Polyline currentPolyline;
+
     private LatLng destination;
 
     private LatLng currentPosition;
+
+    private Marker currentPositionMarker;
+
+    private Marker destinationMarker;
 
     @BindView(R.id.mapbox_autocomplete)
     GeocoderAutoCompleteView autocompleteView;
@@ -69,7 +87,12 @@ public class MapFragment extends Fragment {
     @BindView(R.id.rg_mode)
     RadioGroup modeToggle;
 
+//    @Inject
+//    IMapPresenter<IMapPresenter.MapView> presenter;
+
     private MapboxMap mapboxMap;
+
+    private Bundle savedInstanceState;
 
     @Nullable
     @Override
@@ -77,6 +100,7 @@ public class MapFragment extends Fragment {
         MapboxAccountManager.start(getContext(), PrivateValues.MAPBOX_KEY);
         View fragmentView = inflater.inflate(R.layout.map_fragment, container, false);
 
+        this.savedInstanceState = savedInstanceState;
         ButterKnife.bind(this, fragmentView);
 
         setupMap(savedInstanceState);
@@ -88,9 +112,88 @@ public class MapFragment extends Fragment {
         return fragmentView;
     }
 
+    @Override
+    public void drawDirectionPolyline(PolylineOptions polylineOptions) {
+        if (currentPolyline != null) {
+            currentPolyline.remove();
+        }
+        currentPolyline = mapboxMap.addPolyline(polylineOptions);
+    }
+
+    @Override
+    public void updateCurrentLocation(LatLongPair latLongPair) {
+        currentPosition = new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude());
+
+        if (mapboxMap != null) {
+            if (currentPositionMarker != null) {
+                currentPositionMarker.remove();
+            }
+
+            currentPosition = new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude());
+            currentPositionMarker = mapboxMap.addMarker(
+                    new MarkerOptions().position(new LatLng(latLongPair.getLatitude(), latLongPair.getLongitude()))
+            );
+            currentPositionMarker.setIcon(getMarkerIcon());
+
+            recomputeDirectionPolyline();
+        }
+    }
+
+    private void recomputeDirectionPolyline() {
+        if (destination != null && currentPosition != null) {
+           /* presenter.computeDirection(
+                    new LatLongPair(currentPosition.getLatitude(), currentPosition.getLongitude()),
+                    new LatLongPair(destination.getLatitude(), destination.getLongitude())
+            );*/
+        }
+    }
+    private void updateDestinationPoint(LatLng latLng) {
+        this.destination = latLng;
+
+        if (destinationMarker != null) {
+            destinationMarker.remove();
+        }
+        destinationMarker = mapboxMap.addMarker(new MarkerOptions().position(latLng));
+       /* presenter.computeDirection(
+                new LatLongPair(currentPosition.getLatitude(), currentPosition.getLongitude()),
+                new LatLongPair(destination.getLatitude(), destination.getLongitude())
+        );*/
+    }
+
+    private Icon getMarkerIcon() {
+        IconFactory iconFactory = IconFactory.getInstance(getContext());
+        Drawable iconDrawable = ContextCompat.getDrawable(getContext(), R.drawable.red_circle);
+        return iconFactory.fromDrawable(iconDrawable);
+    }
+
     private void setupMap(Bundle savedInstanceState) {
         mapboxView.onCreate(savedInstanceState);
-        mapboxView.getMapAsync(mapboxMap -> this.mapboxMap = mapboxMap);
+        mapboxView.getMapAsync(this::initMap);
+    }
+
+    private void initMap(MapboxMap mapboxMap) {
+        this.mapboxMap = mapboxMap;
+
+        mapboxMap.setOnMapLongClickListener(this::updateDestinationPoint);
+
+        if (savedInstanceState != null) {
+            List<LatLng> pathList = savedInstanceState.getParcelableArrayList(getString(R.string.path_key));
+            LatLng currentLocation = savedInstanceState.getParcelable(getString(R.string.current_location_key));
+            LatLng destination = savedInstanceState.getParcelable(getString(R.string.destination_key));
+
+            if (pathList != null) {
+                currentPolyline = mapboxMap.addPolyline(new PolylineOptions().addAll(pathList));
+            }
+            if (currentLocation != null) {
+                updateCurrentLocation(new LatLongPair(currentLocation.getLatitude(), currentLocation.getLongitude()));
+            }
+            if (destination != null) {
+                destinationMarker = mapboxMap.addMarker(new MarkerOptions().position(destination));
+                this.destination = destination;
+            }
+        } else if (currentPosition != null) {
+            updateCurrentLocation(new LatLongPair(currentPosition.getLatitude(), currentPosition.getLongitude()));
+        }
     }
 
     private void setupAutocomplete() {
@@ -138,13 +241,13 @@ public class MapFragment extends Fragment {
                     simulateProgress(morphButton);
 
                     if (driverMode.isChecked()) {
-                //        presenter.setupUserMode(DRIVER_MODE);
+                        //presenter.setupUserMode(DRIVER_MODE);
                     } else {
-                //        presenter.setupUserMode(AMBULANCE_MODE);
+                        //presenter.setupUserMode(AMBULANCE_MODE);
                     }
 
                     // send current/destination coordinates & driver/ambulance status
-                //    presenter.setupDestination(new LatLongPair(destination.latitude, destination.longitude));
+                    //presenter.setupDestination(new LatLongPair(destination.getLatitude(), destination.getLongitude()));
                     // and start sending ongoing location updates
                 })
                 .setNegative(getString(R.string.dialog_negative), (dialog, which) -> {
@@ -158,7 +261,7 @@ public class MapFragment extends Fragment {
     private void showConfirmDialog() {
         if (destination != null) {
             //presenter.geocodeToHumanReadableFormat(destination.getLatitude() + "," + destination.getLongitude());
-            showHumanReadableAddress("Sechenova street");
+            showHumanReadableAddress("Some street");
         } else {
             buildNoDestinationSelectedSnackbar();
         }
@@ -178,8 +281,8 @@ public class MapFragment extends Fragment {
         } else {
             // this is required by a server, so it knows that there's no point in sending
             // messages that ask to change a route
-//            presenter.setupUserMode(NON_DRIVER_MODE);
-//            presenter.changeDeviceStatus();
+           // presenter.setupUserMode(NON_DRIVER_MODE);
+           // presenter.changeDeviceStatus();
             morphToReady(morphButton, integer(R.integer.mb_animation));
         }
     }
@@ -264,6 +367,21 @@ public class MapFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapboxView.onSaveInstanceState(outState);
+
+        if (currentPolyline != null) {
+            outState.putParcelableArrayList(getString(R.string.path_key),
+                    new ArrayList<>(currentPolyline.getPoints()));
+        }
+
+        if (currentPosition != null) {
+            outState.putParcelable(getString(R.string.current_location_key), currentPosition);
+        }
+
+        if (destination != null) {
+            outState.putParcelable(getString(R.string.destination_key), destination);
+        }
+
+        outState.putBoolean(MODE_STATE, ambulanceMode.isChecked());
     }
 
     @Override
