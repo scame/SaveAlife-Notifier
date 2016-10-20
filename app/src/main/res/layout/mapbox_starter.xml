@@ -5,14 +5,11 @@
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapbox_mapview"
+    <FrameLayout
+        android:id="@+id/mapbox_activity_fl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        mapbox:center_latitude="41.885"
-        mapbox:center_longitude="-87.679"
-        mapbox:style_url="@string/style_mapbox_streets"
-        mapbox:tilt="20"
-        mapbox:zoom="12" />
+        android:layout_height="match_parent">
+
+    </FrameLayout>
 
 </LinearLayout>
