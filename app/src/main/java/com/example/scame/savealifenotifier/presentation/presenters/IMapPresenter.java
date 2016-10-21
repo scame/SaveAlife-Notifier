@@ -3,6 +3,7 @@ package com.example.scame.savealifenotifier.presentation.presenters;
 
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+import com.mapbox.services.commons.models.Position;
 
 public interface IMapPresenter<T> extends Presenter<T> {
 
@@ -15,7 +16,7 @@ public interface IMapPresenter<T> extends Presenter<T> {
         void updateCurrentLocation(LatLongPair latLongPair);
     }
 
-    void geocodeToHumanReadableFormat(String latLng);
+    void geocodeToHumanReadableFormat(Position position);
 
     void computeDirection(LatLongPair origin, LatLongPair destination);
 

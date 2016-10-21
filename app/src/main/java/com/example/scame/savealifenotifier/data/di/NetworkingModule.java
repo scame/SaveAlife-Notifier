@@ -2,6 +2,7 @@ package com.example.scame.savealifenotifier.data.di;
 
 import com.example.scame.savealifenotifier.data.api.DirectionsApi;
 import com.example.scame.savealifenotifier.data.api.GeocodingApi;
+import com.example.scame.savealifenotifier.data.api.MapboxApi;
 import com.example.scame.savealifenotifier.data.api.ServerApi;
 
 import java.util.concurrent.TimeUnit;
@@ -53,5 +54,11 @@ public class NetworkingModule {
     @Provides
     ServerApi provideServerApi(Retrofit retrofit) {
         return retrofit.create(ServerApi.class);
+    }
+
+    @Singleton
+    @Provides
+    MapboxApi provideMapboxApi(Retrofit retrofit) {
+        return retrofit.create(MapboxApi.class);
     }
 }

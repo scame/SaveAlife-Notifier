@@ -5,9 +5,11 @@ import android.content.SharedPreferences;
 
 import com.example.scame.savealifenotifier.data.api.DirectionsApi;
 import com.example.scame.savealifenotifier.data.api.GeocodingApi;
+import com.example.scame.savealifenotifier.data.api.MapboxApi;
 import com.example.scame.savealifenotifier.data.api.ServerApi;
 import com.example.scame.savealifenotifier.data.mappers.AddressModelMapper;
 import com.example.scame.savealifenotifier.data.mappers.DirectionModelMapper;
+import com.example.scame.savealifenotifier.data.mappers.NewDirectionModelMapper;
 import com.example.scame.savealifenotifier.data.repository.DirectionsDataManagerImp;
 import com.example.scame.savealifenotifier.data.repository.FirebaseTokenManagerImp;
 import com.example.scame.savealifenotifier.data.repository.GeocodingDataManagerImp;
@@ -15,9 +17,11 @@ import com.example.scame.savealifenotifier.data.repository.IDirectionsDataManage
 import com.example.scame.savealifenotifier.data.repository.IFirebaseTokenManager;
 import com.example.scame.savealifenotifier.data.repository.IGeocodingDataManager;
 import com.example.scame.savealifenotifier.data.repository.ILocationDataManager;
+import com.example.scame.savealifenotifier.data.repository.IMapBoxDataManager;
 import com.example.scame.savealifenotifier.data.repository.IMessagesDataManager;
 import com.example.scame.savealifenotifier.data.repository.IUserDataManager;
 import com.example.scame.savealifenotifier.data.repository.LocationDataManagerImp;
+import com.example.scame.savealifenotifier.data.repository.MapboxDataManagerImp;
 import com.example.scame.savealifenotifier.data.repository.MessagesDataManagerImp;
 import com.example.scame.savealifenotifier.data.repository.UserDataManagerImp;
 
@@ -69,5 +73,12 @@ public class DataManagersModule {
     @Provides
     IUserDataManager provideUserDataManager(SharedPreferences sharedPrefs, Context context) {
         return new UserDataManagerImp(sharedPrefs, context);
+    }
+
+    @Singleton
+    @Provides
+    IMapBoxDataManager provideMapboxDataManager(NewDirectionModelMapper directionModelMapper,
+                                                MapboxApi mapboxApi) {
+        return new MapboxDataManagerImp(directionModelMapper, mapboxApi);
     }
 }

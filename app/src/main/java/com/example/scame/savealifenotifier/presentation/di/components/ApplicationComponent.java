@@ -8,6 +8,7 @@ import com.example.scame.savealifenotifier.data.di.DataModule;
 import com.example.scame.savealifenotifier.presentation.di.modules.ApplicationModule;
 import com.example.scame.savealifenotifier.presentation.di.modules.EndPointModule;
 import com.example.scame.savealifenotifier.presentation.di.modules.HelpMeModule;
+import com.example.scame.savealifenotifier.presentation.di.modules.MapboxModule;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
@@ -30,4 +31,6 @@ public interface ApplicationComponent {
     HelpMeComponent getHelpMeComponent(HelpMeModule helpMeModule);
 
     EndPointComponent getEndPointComponent(EndPointModule endPointModule);
+
+    MapboxComponent getMapboxComponent(MapboxModule mapboxModule);
 }

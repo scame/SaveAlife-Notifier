@@ -22,7 +22,9 @@ import com.dd.morphingbutton.MorphingButton;
 import com.dd.morphingbutton.impl.LinearProgressButton;
 import com.example.scame.savealifenotifier.PrivateValues;
 import com.example.scame.savealifenotifier.R;
+import com.example.scame.savealifenotifier.SaveAlifeApp;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
+import com.example.scame.savealifenotifier.presentation.di.modules.MapboxModule;
 import com.example.scame.savealifenotifier.presentation.presenters.IMapPresenter;
 import com.example.scame.savealifenotifier.presentation.utility.ProgressGenerator;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
@@ -45,6 +47,8 @@ import com.mapbox.services.geocoding.v5.GeocodingCriteria;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,8 +91,8 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
     @BindView(R.id.rg_mode)
     RadioGroup modeToggle;
 
-//    @Inject
-//    IMapPresenter<IMapPresenter.MapView> presenter;
+    @Inject
+    IMapPresenter<IMapPresenter.MapView> presenter;
 
     private MapboxMap mapboxMap;
 
@@ -102,6 +106,8 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
 
         this.savedInstanceState = savedInstanceState;
         ButterKnife.bind(this, fragmentView);
+        inject();
+        presenter.setView(this);
 
         setupMap(savedInstanceState);
         setupAutocomplete();
@@ -110,6 +116,10 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
         morphToReady(morphButton, 0);
 
         return fragmentView;
+    }
+
+    private void inject() {
+        SaveAlifeApp.getAppComponent().getMapboxComponent(new MapboxModule()).inject(this);
     }
 
     @Override
@@ -139,14 +149,16 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
         }
     }
 
+    // FIXME: 10/21/16 shouldn't recompute every time device' position changes
     private void recomputeDirectionPolyline() {
         if (destination != null && currentPosition != null) {
-           /* presenter.computeDirection(
+            presenter.computeDirection(
                     new LatLongPair(currentPosition.getLatitude(), currentPosition.getLongitude()),
                     new LatLongPair(destination.getLatitude(), destination.getLongitude())
-            );*/
+            );
         }
     }
+
     private void updateDestinationPoint(LatLng latLng) {
         this.destination = latLng;
 
@@ -154,10 +166,10 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
             destinationMarker.remove();
         }
         destinationMarker = mapboxMap.addMarker(new MarkerOptions().position(latLng));
-       /* presenter.computeDirection(
+        presenter.computeDirection(
                 new LatLongPair(currentPosition.getLatitude(), currentPosition.getLongitude()),
                 new LatLongPair(destination.getLatitude(), destination.getLongitude())
-        );*/
+        );
     }
 
     private Icon getMarkerIcon() {
@@ -200,6 +212,7 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
         autocompleteView.setAccessToken(PrivateValues.MAPBOX_KEY);
         autocompleteView.setType(GeocodingCriteria.TYPE_POI);
         autocompleteView.setHighlightColor(getResources().getColor(R.color.colorAccent));
+
         autocompleteView.setOnFeatureListener(feature -> {
             Position position = feature.asPosition();
             destination = new LatLng(position.getLatitude(), position.getLongitude());
@@ -241,14 +254,13 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
                     simulateProgress(morphButton);
 
                     if (driverMode.isChecked()) {
-                        //presenter.setupUserMode(DRIVER_MODE);
+                        presenter.setupUserMode(DRIVER_MODE);
                     } else {
-                        //presenter.setupUserMode(AMBULANCE_MODE);
+                        presenter.setupUserMode(AMBULANCE_MODE);
                     }
 
                     // send current/destination coordinates & driver/ambulance status
-                    //presenter.setupDestination(new LatLongPair(destination.getLatitude(), destination.getLongitude()));
-                    // and start sending ongoing location updates
+                    presenter.setupDestination(new LatLongPair(destination.getLatitude(), destination.getLongitude()));
                 })
                 .setNegative(getString(R.string.dialog_negative), (dialog, which) -> {
                     morphButtonClicked = !morphButtonClicked;
@@ -260,8 +272,8 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
 
     private void showConfirmDialog() {
         if (destination != null) {
-            //presenter.geocodeToHumanReadableFormat(destination.getLatitude() + "," + destination.getLongitude());
-            showHumanReadableAddress("Some street");
+            Position position = Position.fromCoordinates(destination.getLongitude(), destination.getLatitude());
+            presenter.geocodeToHumanReadableFormat(position);
         } else {
             buildNoDestinationSelectedSnackbar();
         }
@@ -281,8 +293,8 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
         } else {
             // this is required by a server, so it knows that there's no point in sending
             // messages that ask to change a route
-           // presenter.setupUserMode(NON_DRIVER_MODE);
-           // presenter.changeDeviceStatus();
+            presenter.setupUserMode(NON_DRIVER_MODE);
+            presenter.changeDeviceStatus();
             morphToReady(morphButton, integer(R.integer.mb_animation));
         }
     }
@@ -354,12 +366,14 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
     @Override
     public void onResume() {
         super.onResume();
+        presenter.startLocationUpdates();
         mapboxView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        presenter.pause();
         mapboxView.onPause();
     }
 
