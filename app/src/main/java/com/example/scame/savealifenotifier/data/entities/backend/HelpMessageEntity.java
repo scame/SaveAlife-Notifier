@@ -1,4 +1,4 @@
-package com.example.scame.savealifenotifier.data.entities;
+package com.example.scame.savealifenotifier.data.entities.backend;
 
 
 public class HelpMessageEntity {

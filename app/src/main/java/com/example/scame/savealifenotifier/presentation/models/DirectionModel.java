@@ -1,7 +1,8 @@
 package com.example.scame.savealifenotifier.presentation.models;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
+
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.List;
 

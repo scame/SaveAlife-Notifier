@@ -24,6 +24,7 @@ import com.example.scame.savealifenotifier.PrivateValues;
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.SaveAlifeApp;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
+import com.example.scame.savealifenotifier.presentation.activities.PageActivity;
 import com.example.scame.savealifenotifier.presentation.di.modules.MapboxModule;
 import com.example.scame.savealifenotifier.presentation.presenters.IMapPresenter;
 import com.example.scame.savealifenotifier.presentation.utility.ProgressGenerator;
@@ -120,6 +121,9 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
 
     private void inject() {
         SaveAlifeApp.getAppComponent().getMapboxComponent(new MapboxModule()).inject(this);
+        if (getActivity() instanceof PageActivity) {
+            ((PageActivity) getActivity()).getMapboxComponent().inject(this);
+        }
     }
 
     @Override

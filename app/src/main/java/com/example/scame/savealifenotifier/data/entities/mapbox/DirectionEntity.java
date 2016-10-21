@@ -1,4 +1,4 @@
-package com.example.scame.savealifenotifier.data.entities;
+package com.example.scame.savealifenotifier.data.entities.mapbox;
 
 import java.util.ArrayList;
 import java.util.List;

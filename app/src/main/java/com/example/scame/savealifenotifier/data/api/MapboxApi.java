@@ -1,7 +1,7 @@
 package com.example.scame.savealifenotifier.data.api;
 
 
-import com.example.scame.savealifenotifier.data.entities.DirectionEntity;
+import com.example.scame.savealifenotifier.data.entities.mapbox.DirectionEntity;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;

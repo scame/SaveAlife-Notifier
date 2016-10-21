@@ -1,11 +1,11 @@
 package com.example.scame.savealifenotifier.data.api;
 
-import com.example.scame.savealifenotifier.data.entities.DestinationEntity;
-import com.example.scame.savealifenotifier.data.entities.HelpMessageEntity;
-import com.example.scame.savealifenotifier.data.entities.LocationMessageEntity;
-import com.example.scame.savealifenotifier.data.entities.RegistrationEntity;
-import com.example.scame.savealifenotifier.data.entities.StatusEntity;
-import com.example.scame.savealifenotifier.data.entities.TokenUpdateEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.DestinationEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.HelpMessageEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.LocationMessageEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.RegistrationEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.StatusEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.TokenUpdateEntity;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;

@@ -1,7 +1,5 @@
-package com.example.scame.savealifenotifier.data.entities;
+package com.example.scame.savealifenotifier.data.entities.mapbox;
 
-
-import com.google.gson.annotations.SerializedName;
 
 public class RouteEntity {
 
@@ -10,17 +8,6 @@ public class RouteEntity {
     private double duration;
 
     private double distance;
-
-    @SerializedName("overview_polyline")
-    private PointsEntity overviewPolyline;
-
-    public PointsEntity getOverviewPolyline() {
-        return overviewPolyline;
-    }
-
-    public void setOverviewPolyline(PointsEntity overviewPolyline) {
-        this.overviewPolyline = overviewPolyline;
-    }
 
     public void setGeometry(String geometry) {
         this.geometry = geometry;

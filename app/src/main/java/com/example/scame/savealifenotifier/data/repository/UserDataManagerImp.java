@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.scame.savealifenotifier.R;
-import com.example.scame.savealifenotifier.presentation.fragments.EndPointFragment;
+import com.example.scame.savealifenotifier.presentation.fragments.MapFragment;
 
 public class UserDataManagerImp implements IUserDataManager {
 
@@ -24,6 +24,6 @@ public class UserDataManagerImp implements IUserDataManager {
 
     @Override
     public int getUserMode() {
-        return sharedPrefs.getInt(context.getString(R.string.current_mode), EndPointFragment.NON_DRIVER_MODE); // non-driver mode is default
+        return sharedPrefs.getInt(context.getString(R.string.current_mode), MapFragment.NON_DRIVER_MODE); // non-driver mode is default
     }
 }

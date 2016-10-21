@@ -4,9 +4,9 @@ package com.example.scame.savealifenotifier.data.repository;
 import com.example.scame.savealifenotifier.PrivateValues;
 import com.example.scame.savealifenotifier.data.api.MapboxApi;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
-import com.example.scame.savealifenotifier.data.mappers.NewDirectionModelMapper;
+import com.example.scame.savealifenotifier.data.mappers.DirectionModelMapper;
 import com.example.scame.savealifenotifier.presentation.models.AddressModel;
-import com.example.scame.savealifenotifier.presentation.models.NewDirectionModel;
+import com.example.scame.savealifenotifier.presentation.models.DirectionModel;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.geocoding.v5.GeocodingCriteria;
@@ -24,11 +24,11 @@ public class MapboxDataManagerImp implements IMapBoxDataManager {
 
     private MapboxApi mapboxApi;
 
-    private NewDirectionModelMapper directionModelMapper;
+    private DirectionModelMapper directionModelMapper;
 
     private MapboxGeocoding mapboxGeocodingClient;
 
-    public MapboxDataManagerImp(NewDirectionModelMapper directionModelMapper,
+    public MapboxDataManagerImp(DirectionModelMapper directionModelMapper,
                                 MapboxApi mapboxApi) {
         this.directionModelMapper = directionModelMapper;
         this.mapboxApi = mapboxApi;
@@ -75,7 +75,7 @@ public class MapboxDataManagerImp implements IMapBoxDataManager {
 
     // TODO: implement through MapboxDirections
     @Override
-    public Observable<NewDirectionModel> getDirection(LatLongPair origin, LatLongPair dest) {
+    public Observable<DirectionModel> getDirection(LatLongPair origin, LatLongPair dest) {
         return mapboxApi.getDirection(PROFILE_TYPE, formatCoordinates(origin, dest), PrivateValues.MAPBOX_KEY)
                 .map(directionModelMapper::convert);
     }

@@ -42,8 +42,6 @@
 
         </activity>
 
-        <activity android:name=".presentation.activities.MapboxStarter" />
-
         <service
             android:name=".firebase.MyFirebaseMessagingService">
             <intent-filter>

@@ -5,14 +5,14 @@ import android.content.Context;
 
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.data.api.ServerApi;
-import com.example.scame.savealifenotifier.data.entities.DestinationEntity;
-import com.example.scame.savealifenotifier.data.entities.HelpMessageEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.DestinationEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.HelpMessageEntity;
 import com.example.scame.savealifenotifier.data.entities.LatLongPair;
-import com.example.scame.savealifenotifier.data.entities.LocationMessageEntity;
-import com.example.scame.savealifenotifier.data.entities.RegistrationEntity;
-import com.example.scame.savealifenotifier.data.entities.StatusEntity;
-import com.example.scame.savealifenotifier.data.entities.TokenUpdateEntity;
-import com.example.scame.savealifenotifier.presentation.fragments.EndPointFragment;
+import com.example.scame.savealifenotifier.data.entities.backend.LocationMessageEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.RegistrationEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.StatusEntity;
+import com.example.scame.savealifenotifier.data.entities.backend.TokenUpdateEntity;
+import com.example.scame.savealifenotifier.presentation.fragments.MapFragment;
 
 import okhttp3.ResponseBody;
 import rx.Observable;
@@ -117,11 +117,11 @@ public class MessagesDataManagerImp implements IMessagesDataManager {
         int currentMode = userDataManager.getUserMode();
 
         switch (currentMode) {
-            case EndPointFragment.DRIVER_MODE:
+            case MapFragment.DRIVER_MODE:
                 return context.getString(R.string.driver_mode);
-            case EndPointFragment.AMBULANCE_MODE:
+            case MapFragment.AMBULANCE_MODE:
                 return context.getString(R.string.ambulance_mode);
-            case EndPointFragment.NON_DRIVER_MODE:
+            case MapFragment.NON_DRIVER_MODE:
                 return context.getString(R.string.non_driver_mode);
             default:
                 return context.getString(R.string.non_driver_mode);

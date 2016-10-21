@@ -17,7 +17,7 @@ import com.example.scame.savealifenotifier.data.mappers.HelpMessageMapper;
 import com.example.scame.savealifenotifier.data.repository.IUserDataManager;
 import com.example.scame.savealifenotifier.presentation.activities.DriversHelpMapActivity;
 import com.example.scame.savealifenotifier.presentation.activities.GoogleHelpMapActivity;
-import com.example.scame.savealifenotifier.presentation.fragments.EndPointFragment;
+import com.example.scame.savealifenotifier.presentation.fragments.MapFragment;
 import com.example.scame.savealifenotifier.presentation.models.DriversMessageModel;
 import com.example.scame.savealifenotifier.presentation.models.HelpMessageModel;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -71,7 +71,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private boolean ambulanceModeEnabled() {
-        return userDataManager.getUserMode() == EndPointFragment.AMBULANCE_MODE;
+        return userDataManager.getUserMode() == MapFragment.AMBULANCE_MODE;
     }
 
     private void sendCommonNotification(HelpMessageModel helpMessage) {

@@ -3,19 +3,11 @@ package com.example.scame.savealifenotifier.data.di;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.scame.savealifenotifier.data.api.DirectionsApi;
-import com.example.scame.savealifenotifier.data.api.GeocodingApi;
 import com.example.scame.savealifenotifier.data.api.MapboxApi;
 import com.example.scame.savealifenotifier.data.api.ServerApi;
-import com.example.scame.savealifenotifier.data.mappers.AddressModelMapper;
 import com.example.scame.savealifenotifier.data.mappers.DirectionModelMapper;
-import com.example.scame.savealifenotifier.data.mappers.NewDirectionModelMapper;
-import com.example.scame.savealifenotifier.data.repository.DirectionsDataManagerImp;
 import com.example.scame.savealifenotifier.data.repository.FirebaseTokenManagerImp;
-import com.example.scame.savealifenotifier.data.repository.GeocodingDataManagerImp;
-import com.example.scame.savealifenotifier.data.repository.IDirectionsDataManager;
 import com.example.scame.savealifenotifier.data.repository.IFirebaseTokenManager;
-import com.example.scame.savealifenotifier.data.repository.IGeocodingDataManager;
 import com.example.scame.savealifenotifier.data.repository.ILocationDataManager;
 import com.example.scame.savealifenotifier.data.repository.IMapBoxDataManager;
 import com.example.scame.savealifenotifier.data.repository.IMessagesDataManager;
@@ -45,20 +37,6 @@ public class DataManagersModule {
 
     @Singleton
     @Provides
-    IGeocodingDataManager provideGeocodingDataManager(AddressModelMapper addressModelMapper,
-                                                      GeocodingApi geocodingApi) {
-        return new GeocodingDataManagerImp(addressModelMapper, geocodingApi);
-    }
-
-    @Singleton
-    @Provides
-    IDirectionsDataManager provideDirectionsDatamanager(DirectionsApi directionsApi,
-                                                        DirectionModelMapper mapper) {
-        return new DirectionsDataManagerImp(directionsApi, mapper);
-    }
-
-    @Singleton
-    @Provides
     ILocationDataManager provideLocationDataManager(SharedPreferences sharedPrefs, Context context) {
         return new LocationDataManagerImp(sharedPrefs, context);
     }
@@ -77,7 +55,7 @@ public class DataManagersModule {
 
     @Singleton
     @Provides
-    IMapBoxDataManager provideMapboxDataManager(NewDirectionModelMapper directionModelMapper,
+    IMapBoxDataManager provideMapboxDataManager(DirectionModelMapper directionModelMapper,
                                                 MapboxApi mapboxApi) {
         return new MapboxDataManagerImp(directionModelMapper, mapboxApi);
     }

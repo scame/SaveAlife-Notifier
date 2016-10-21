@@ -5,11 +5,11 @@ import com.example.scame.savealifenotifier.data.entities.LatLongPair;
 import com.example.scame.savealifenotifier.data.repository.IMapBoxDataManager;
 import com.example.scame.savealifenotifier.domain.schedulers.ObserveOn;
 import com.example.scame.savealifenotifier.domain.schedulers.SubscribeOn;
-import com.example.scame.savealifenotifier.presentation.models.NewDirectionModel;
+import com.example.scame.savealifenotifier.presentation.models.DirectionModel;
 
 import rx.Observable;
 
-public class MapboxDirectionUseCase extends UseCase<NewDirectionModel> {
+public class MapboxDirectionUseCase extends UseCase<DirectionModel> {
 
     private IMapBoxDataManager mapBoxDataManager;
 
@@ -23,7 +23,7 @@ public class MapboxDirectionUseCase extends UseCase<NewDirectionModel> {
     }
 
     @Override
-    protected Observable<NewDirectionModel> getUseCaseObservable() {
+    protected Observable<DirectionModel> getUseCaseObservable() {
         return mapBoxDataManager.getDirection(origin, dest);
     }
 

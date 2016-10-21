@@ -9,12 +9,12 @@ import android.widget.ImageView;
 
 import com.example.scame.savealifenotifier.R;
 import com.example.scame.savealifenotifier.presentation.di.components.ApplicationComponent;
-import com.example.scame.savealifenotifier.presentation.di.components.EndPointComponent;
 import com.example.scame.savealifenotifier.presentation.di.components.HelpMeComponent;
-import com.example.scame.savealifenotifier.presentation.di.modules.EndPointModule;
+import com.example.scame.savealifenotifier.presentation.di.components.MapboxComponent;
 import com.example.scame.savealifenotifier.presentation.di.modules.HelpMeModule;
-import com.example.scame.savealifenotifier.presentation.fragments.EndPointFragment;
+import com.example.scame.savealifenotifier.presentation.di.modules.MapboxModule;
 import com.example.scame.savealifenotifier.presentation.fragments.HelpMeFragment;
+import com.example.scame.savealifenotifier.presentation.fragments.MapFragment;
 import com.hanks.htextview.HTextView;
 
 import butterknife.BindView;
@@ -33,10 +33,10 @@ public class PageActivity extends BaseActivity {
     private static final String CLICK_VALUE = "CLICK_VALUE";
 
     private static final String HELP_ME_FRAG_TAG = "helpMeTag";
-    private static final String END_POINT_FRAG_TAG = "endPointTag";
+    private static final String MAP_FRAGMENT_TAG = "mapFragTag";
 
     private HelpMeComponent helpMeComponent;
-    private EndPointComponent endPointComponent;
+    private MapboxComponent mapboxComponent;
 
     private String helpMeText = "HelpMe";
     private String mapText = "Map";
@@ -57,7 +57,7 @@ public class PageActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
 
-        if (getSupportFragmentManager().findFragmentByTag(END_POINT_FRAG_TAG) == null) {
+        if (getSupportFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG) == null) {
             replaceFragment(R.id.page_activity_fl, new HelpMeFragment(), HELP_ME_FRAG_TAG);
         }
     }
@@ -65,17 +65,16 @@ public class PageActivity extends BaseActivity {
     @Override
     protected void inject(ApplicationComponent component) {
         helpMeComponent = component.getHelpMeComponent(new HelpMeModule());
-        endPointComponent = component.getEndPointComponent(new EndPointModule());
+        mapboxComponent = component.getMapboxComponent(new MapboxModule());
     }
 
     public HelpMeComponent getHelpMeComponent() {
         return helpMeComponent;
     }
 
-    public EndPointComponent getEndPointComponent() {
-        return endPointComponent;
+    public MapboxComponent getMapboxComponent() {
+        return mapboxComponent;
     }
-
 
     @OnClick(R.id.toolbar)
     public void onToolbarClick() {
@@ -90,7 +89,7 @@ public class PageActivity extends BaseActivity {
         } else {
             currentPageView.animateText(mapText);
             nextPageView.animateText(helpMeText);
-            replaceFragment(R.id.page_activity_fl, new EndPointFragment(), END_POINT_FRAG_TAG);
+            replaceFragment(R.id.page_activity_fl, new MapFragment(), MAP_FRAGMENT_TAG);
         }
     }
 

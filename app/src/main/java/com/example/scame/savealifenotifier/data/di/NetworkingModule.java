@@ -1,7 +1,5 @@
 package com.example.scame.savealifenotifier.data.di;
 
-import com.example.scame.savealifenotifier.data.api.DirectionsApi;
-import com.example.scame.savealifenotifier.data.api.GeocodingApi;
 import com.example.scame.savealifenotifier.data.api.MapboxApi;
 import com.example.scame.savealifenotifier.data.api.ServerApi;
 
@@ -36,18 +34,6 @@ public class NetworkingModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
-    }
-
-    @Singleton
-    @Provides
-    DirectionsApi provideDirectionsApi(Retrofit retrofit) {
-        return retrofit.create(DirectionsApi.class);
-    }
-
-    @Singleton
-    @Provides
-    GeocodingApi provideGeocodingApi(Retrofit retrofit) {
-        return retrofit.create(GeocodingApi.class);
     }
 
     @Singleton

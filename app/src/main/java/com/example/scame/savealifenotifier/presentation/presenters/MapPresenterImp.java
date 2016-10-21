@@ -12,7 +12,7 @@ import com.example.scame.savealifenotifier.domain.usecases.MapboxGeocodingUseCas
 import com.example.scame.savealifenotifier.domain.usecases.SetupDestinationUseCase;
 import com.example.scame.savealifenotifier.domain.usecases.SetupUserModeUseCase;
 import com.example.scame.savealifenotifier.presentation.models.AddressModel;
-import com.example.scame.savealifenotifier.presentation.models.NewDirectionModel;
+import com.example.scame.savealifenotifier.presentation.models.DirectionModel;
 import com.mapbox.services.commons.models.Position;
 
 import java.io.IOException;
@@ -126,10 +126,10 @@ public class MapPresenterImp<T extends IMapPresenter.MapView> implements IMapPre
         }
     }
 
-    private final class DirectionSubscriber extends DefaultSubscriber<NewDirectionModel> {
+    private final class DirectionSubscriber extends DefaultSubscriber<DirectionModel> {
 
         @Override
-        public void onNext(NewDirectionModel directionModel) {
+        public void onNext(DirectionModel directionModel) {
             super.onNext(directionModel);
 
             if (view != null) {
