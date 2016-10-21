@@ -30,7 +30,6 @@ import com.example.scame.savealifenotifier.presentation.presenters.IMapPresenter
 import com.example.scame.savealifenotifier.presentation.utility.ProgressGenerator;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
-import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -102,7 +101,6 @@ public class MapFragment extends Fragment implements IMapPresenter.MapView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        MapboxAccountManager.start(getContext(), PrivateValues.MAPBOX_KEY);
         View fragmentView = inflater.inflate(R.layout.map_fragment, container, false);
 
         this.savedInstanceState = savedInstanceState;

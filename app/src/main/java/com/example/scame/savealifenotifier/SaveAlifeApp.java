@@ -9,6 +9,7 @@ import com.example.scame.savealifenotifier.data.di.DataModule;
 import com.example.scame.savealifenotifier.presentation.di.components.ApplicationComponent;
 import com.example.scame.savealifenotifier.presentation.di.components.DaggerApplicationComponent;
 import com.example.scame.savealifenotifier.presentation.di.modules.ApplicationModule;
+import com.mapbox.mapboxsdk.MapboxAccountManager;
 
 public class SaveAlifeApp extends Application {
 
@@ -23,7 +24,7 @@ public class SaveAlifeApp extends Application {
         super.onCreate();
 
         buildAppComponent();
-
+        MapboxAccountManager.start(this, PrivateValues.MAPBOX_KEY);
         startService(new Intent(this, FusedLocationService.class));
     }
 

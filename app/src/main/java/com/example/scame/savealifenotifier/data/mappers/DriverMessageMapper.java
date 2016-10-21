@@ -2,7 +2,7 @@ package com.example.scame.savealifenotifier.data.mappers;
 
 
 import com.example.scame.savealifenotifier.presentation.models.DriversMessageModel;
-import com.google.android.gms.maps.model.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
